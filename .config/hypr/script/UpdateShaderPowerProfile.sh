@@ -1,6 +1,6 @@
 #!/bin/bash
 
- exit #disable the shader
+ # exit #disable the shader
 
 toggle_file="$(dirname "$0")/ShaderRGBAnimated"
 override_file="$(dirname "$0")/ShaderOverridePrevend"

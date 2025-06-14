@@ -25,6 +25,5 @@ link_with_info .config/kitty ~/.config/kitty
 link_with_info .config/hyprpanel ~/.config/hyprpanel
 link_with_info .config/background ~/.config/background
 link_with_info .config/wofi ~/.config/wofi
+link_with_info .config/commit_all_and_push.sh ~/.config/commit_all_and_push.sh
 
-link_with_info dotfiles/.zshrc ~/.zshrc
-link_with_info dotfiles/.gitconfig ~/.gitconfig

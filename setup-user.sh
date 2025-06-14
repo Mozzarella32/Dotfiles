@@ -12,7 +12,7 @@ link_with_info() {
     LINKNAME="$2"
     if [ -L "$LINKNAME" ] || [ -e "$LINKNAME" ]; then
         echo "Removing existing: $LINKNAME"
-        unlink "$LINKNAME"
+        rm -rf "$LINKNAME"
     fi
     echo "Creating Symlink: $LINKNAME → $ZIEL"
     ln -s "$ZIEL" "$LINKNAME"
@@ -26,4 +26,3 @@ link_with_info .config/hyprpanel ~/.config/hyprpanel
 link_with_info .config/background ~/.config/background
 link_with_info .config/wofi ~/.config/wofi
 link_with_info .config/commit_all_and_push.sh ~/.config/commit_all_and_push.sh
-

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-./setup-user.sh
+./install-packages.sh
 
-sudo ./setup-sudo.sh
+./setup-config.sh

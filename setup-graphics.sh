@@ -6,7 +6,7 @@
 # Enable SDDM service (assumes systemd)
 echo "Enabling sddm.service..."
 sudo systemctl enable sddm.service
-sudo systemctl start sddm.service
+# sudo systemctl start sddm.service
 
 # Download and install the SDDM Minecraft theme
 THEME_NAME="sddm-minecraft"

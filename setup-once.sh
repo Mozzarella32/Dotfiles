@@ -30,36 +30,29 @@ copy_with_info() {
 copy_with_info dotfiles/.zshrc ~/.zshrc
 copy_with_info dotfiles/.gitconfig ~/.gitconfig
 
-
 set -e
 
-# Check for zsh, install if missing (Arch/Manjaro example, adapt for your distro)
-# if ! command -v zsh >/dev/null 2>&1; then
-#     echo "zsh is not installed. Installing zsh..."
-#     if command -v pacman >/dev/null 2>&1; then
-#         sudo pacman -S --needed zsh
-#     elif command -v apt-get >/dev/null 2>&1; then
-#         sudo apt-get update && sudo apt-get install -y zsh
-#     else
-#         echo "Please install zsh manually."
-#         exit 1
-#     fi
-# fi
 
-# Install oh-my-zsh if not already installed
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo "Installing oh-my-zsh..."
-    export RUNZSH=no  # Don't launch zsh immediately after install
-    export CHSH=no    # Don't change shell automatically
+    export RUNZSH=no
+    export CHSH=no
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 else
-    echo "oh-my-zsh is already installed."
+    echo "oh-my-zsh already installed."
 fi
 
-# Set zsh as default shell for current user if not already
+CUSTOM_THEME_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes"
+THEME_REPO="https://raw.githubusercontent.com/archcraft-os/archcraft-themes/main/oh-my-zsh/archcraft.zsh-theme"
+THEME_FILE="$CUSTOM_THEME_DIR/archcraft.zsh-theme"
+
+mkdir -p "$CUSTOM_THEME_DIR"
+echo "Downloading Archcraft oh-my-zsh theme..."
+curl -fsSL "$THEME_REPO" -o "$THEME_FILE"
+
 if [ "$SHELL" != "$(command -v zsh)" ]; then
-    echo "Changing default shell to zsh for user $USER..."
+    echo "Changing default shell to zsh for $USER..."
     chsh -s "$(command -v zsh)"
 fi
 
-echo "oh-my-zsh setup complete!"
+echo "oh-my-zsh with Archcraft theme setup complete!"

@@ -1,0 +1,416 @@
+// -*- mode: jsonc -*-
+{
+    // "layer": "top", // Waybar at top layer
+    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 25, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 6, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "margin-left": 6,
+    "margin-right": 6,
+    "modules-left": [
+        //"sway/mode",
+        //"sway/scratchpad",
+        //"custom/media"
+        "group/workspaces",
+        "group/audio",
+        "group/debug"          
+    ],
+    "group/workspaces": {
+        "orientation": "inherit",
+        "modules": [
+            "custom/arch-logo",
+            "hyprland/workspaces"
+        ]
+    },
+    "group/audio": {
+        "orientation": "inherit",
+        "modules": [
+            "pulseaudio"
+        ]
+    },
+    "group/debug": {
+        "orientation": "inherit",
+        "modules": [
+            "custom/displayShader",
+            "custom/damageTracking"
+        ]
+    },
+    "modules-center": [
+        "custom/window_type",
+        "hyprland/window"
+    ],
+    "modules-right": [
+        //"mpd",
+        //"idle_inhibitor",
+        //"network",
+        //"power-profiles-daemon",
+        //"cpu",
+        //"memory",
+        //"temperature",
+        //"custom/brightness",
+        //"backlight",
+        //"keyboard-state",
+        //"hyprland/language",
+        //"battery",
+        //"battery#bat2",
+        //"clock",
+        "tray",
+        //"custom/power"
+        "group/wifi",
+        "group/hardware",
+        "group/info",
+        "group/power"
+    ],
+    "group/wifi": {
+        "orientation": "inherit",
+        "modules": [
+            "mpd",// don't know
+            "network"
+        ]
+    },
+    "group/hardware": {
+        "orientation": "inherit",
+        "modules": [
+            "cpu",
+            "memory",
+            "temperature",
+            "custom/Wattage"
+        ]
+    },
+    "group/info": {
+        "orientation": "inherit",
+        "modules": [
+            "custom/virtualKeyboard",
+            "backlight",
+            //"custom/brightness",
+            "battery",
+            "power-profiles-daemon",
+            "clock",
+        ]
+    },
+    "group/power": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 500,
+            //"children-class": "not-power",
+            "transition-left-to-right": false,
+        },
+        "modules": [
+            "custom/power",
+            // "custom/quit",
+            // "custom/lock",
+            "custom/reboot",
+            "custom/suspend"
+        ]
+    },
+    "custom/virtualKeyboard": {
+        "format": " 󰌌 ",
+        "tooltip": true,
+        "tooltip-format": "Toggle virtual keyboard",
+        "on-click": "~/.config/hypr/script/ToggleVirtualKeyboard.sh" 
+    },
+    "custom/Wattage": {
+        //"exec": "cat '{printf \"%.1f W \", $1*10^-6}' /sys/class/power_supply/BAT1/power_now && ~/.config/hypr/script/UpdateShaderPowerProfile.sh > /dev/null",
+        "exec": "awk '{printf \"%.1f W \", $1*10^-6}' /sys/class/power_supply/BAT1/power_now && ~/.config/hypr/script/UpdateShaderPowerProfile.sh > /dev/null",
+        "interval": 2,
+        "on-click": "~/.config/hypr/script/SwitchOrOpenWithTerminal.sh kitty btop"
+    },
+    "custom/power": {
+        "format": "", 
+        "tooltip": true,
+        "tooltip-format": "shutdown",
+        "on-click": "shutdown now" 
+    },
+    // "custom/quit": {
+    //     "format": "󰗼",
+    //     "tooltip": true,
+    //     "tooltip-format": "logout",
+    //     "on-click": "hyprctl dispatch exit"
+    // },
+    // "custom/lock": {
+    //     "format": "",
+    //     "tooltip": true,
+    //     "tooltip-format": "lock",
+    //     "on-click": "hyprlock"
+    // },
+    "custom/suspend": {
+            "format": "󰤄 ",
+            "tooltip": true,
+            "tooltip-format": "suspend",
+            "on-click": "systemctl suspend"   
+    },
+    "custom/reboot": {
+        "format": " 󰑓  ",
+        "tooltip": true,
+        "tooltip-format": "reboot",
+        "on-click": "systemctl reboot"
+    },
+    "custom/arch-logo": {
+        "format": "󰣇",
+        "tooltip": false,
+        "on-click": "~/.config/hypr/script/StartInFirefoxAndSwitch.sh \"https://wiki.archlinux.org/title/Main_page\""
+    },
+    "custom/displayShader": {
+        "exec": "basename $(hyprctl getoption decoration:screen_shader | awk '{print $2}' || echo 'None')",
+        "interval": 2
+    },
+    "custom/damageTracking": {
+        "exec": "hyprctl getoption debug:damage_tracking | awk '{print $2}'",
+        "interval": 2
+    },
+    "custom/space": {
+        "format": " ",
+    },
+    // Modules configuration
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "warp-on-scroll": false,
+        "format": "{name}",
+        "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "urgent": "",
+            "focused": "",
+            "default": ""
+        }
+    },
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        },
+    },
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "sway/scratchpad": {
+        "format": "{icon} {count}",
+        "show-empty": false,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}"
+    },
+    "mpd": {
+        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
+        "format-disconnected": "Disconnected ",
+        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "unknown-tag": "N/A",
+        "interval": 5,
+        "consume-icons": {
+            "on": " "
+        },
+        "random-icons": {
+            "off": "<span color=\"#f53c3c\"></span> ",
+            "on": " "
+        },
+        "repeat-icons": {
+            "on": " "
+        },
+        "single-icons": {
+            "on": "1 "
+        },
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        },
+        "tooltip-format": "MPD (connected)",
+        "tooltip-format-disconnected": "MPD (disconnected)"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "tray": {
+        // "icon-size": 9,
+        "spacing": 10
+    },
+    "clock": {
+        // "timezone": "Germany/Munich",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%d.%m.%Y}"
+    },
+    "cpu": {
+        //"format": "{usage}% ",
+        "tooltip": false,
+        "interval": 2,
+        "format-critical":  "<span color='#c20821'><b>{usage}% </b></span>",
+        "format-state-9":   "<span color='#d1151c'>{usage}% </span>",
+        "format-state-8":   "<span color='#df2b17'>{usage}% </span>",
+        "format-state-7":   "<span color='#eb4213'>{usage}% </span>",
+        "format-state-6":   "<span color='#f75b0e'>{usage}% </span>",
+        "format-state-5":   "<span color='#ff770a'>{usage}% </span>",
+        "format-state-4":   "<span color='#ffa100'>{usage}% </span>",
+        "format-state-3":   "<span color='#c6cc00'>{usage}% </span>",
+        "format-state-2":   "<span color='#8bd600'>{usage}% </span>",
+        "format-state-1":   "<span color='#52e000'>{usage}% </span>",
+        "format-state-0":   "<span color='#00ff00'>{usage}% </span>",
+        "states": {
+            "critical": 95,
+            "state-9": 90,
+            "state-8": 80,
+            "state-7": 70,
+            "state-6": 60,
+            "state-5": 50,
+            "state-4": 40,
+            "state-3": 30,
+            "state-2": 20,
+            "state-1": 10,
+            "state-0": 0
+        },
+        "on-click": "~/.config/hypr/script/SwitchOrOpenWithTerminal.sh kitty btop"
+    },
+    "memory": {
+        "format-critical":  "<span color='#c20821'><b>{}% </b></span>",
+        "format-state-9":   "<span color='#d1151c'>{}% </span>",
+        "format-state-8":   "<span color='#df2b17'>{}% </span>",
+        "format-state-7":   "<span color='#eb4213'>{}% </span>",
+        "format-state-6":   "<span color='#f75b0e'>{}% </span>",
+        "format-state-5":   "<span color='#ff770a'>{}% </span>",
+        "format-state-4":   "<span color='#ffa100'>{}% </span>",
+        "format-state-3":   "<span color='#c6cc00'>{}% </span>",
+        "format-state-2":   "<span color='#8bd600'>{}% </span>",
+        "format-state-1":   "<span color='#52e000'>{}% </span>",
+        "format-state-0":   "<span color='#00ff00'>{}% </span>",
+        "states": {
+            "critical": 95,
+            "state-9": 90,
+            "state-8": 80,
+            "state-7": 70,
+            "state-6": 60,
+            "state-5": 50,
+            "state-4": 40,
+            "state-3": 30,
+            "state-2": 20,
+            "state-1": 10,
+            "state-0": 0
+        },
+        "on-click": "~/.config/hypr/script/SwitchOrOpenWithTerminal.sh kitty btop"
+    },
+    "temperature": {
+	    "interval": 3,
+        // "thermal-zone": 2,
+        "hwmon-path": "/sys/class/thermal/thermal_zone1/temp",
+        "critical-threshold": 75,
+        // "format-critical": "{temperatureC}°C {icon}",
+        "format": "{temperatureC}°C {icon}",
+        //"format-icons": [" ", "", " "],
+        "format-icons": ["","","","","",""],
+        "tooltip": false,
+        "on-click": "~/.config/hypr/script/SwitchOrOpenWithTerminal.sh kitty btop"
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
+    "battery": {
+        "interval": 5,
+        "states": {
+	        "full": 100,
+            "good": 80,
+            "warning": 40,
+            "critical": 20
+        },
+        "format": "{capacity}% {icon}",
+        "format-full": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": [" ", " ", " ", " ", " "]
+    },
+    "battery#bat2": {
+        "bat": "BAT2"
+    },
+    "power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+      "tooltip": true,
+      "format-icons": {
+        "default": "",
+        "performance": "",
+        "balanced": " ",
+        "power-saver": " "
+      },
+      "on-click": "~/.config/hypr/script/UpdateShaderPowerProfile.sh"
+    },
+    "network": {
+        //"interface": "wlp2*", // (Optional) To force the use of this interface
+        //"format-wifi": "{essid} ({signalStrength}%)  ",
+        "format-wifi": "{essid} ({signalStrength}%) 󰖩 ",
+        "format-ethernet": "{ipaddr}/{cidr}  ",
+        "tooltip-format": "{ifname} via {gwaddr}  ",
+        "format-linked": "{ifname} (No IP)  ",
+        //"format-disconnected": "Disconnected ⚠",
+        "format-disconnected": "󰖪 ",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "{volume}% {icon}{format_source}",
+        "format-bluetooth": "{volume}% {icon}i {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}% ",
+        "format-source-muted": " ",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["  ", "  ", "  "]
+        },
+        "on-click": "pavucontrol"
+    },
+    "custom/window_type": {
+        "exec": "~/.config/hypr/script/RunnesOnX.sh",
+        "interval": 1,
+        "return-type": "plain"
+    },
+    //"custom/brightness": {
+        //"tooltip": true,
+        //"tooltip-format": "<p>HI</p>",
+        //"on-click": "brightnessctl s 50%",
+        "exec": "~/.config/hypr/script/GetBrightness.sh",
+        "interval": 1,
+        "return-type": "plain"
+    },
+   //"custom/media": {
+        "format": "{icon} {text}",
+        "return-type": "json",
+        "max-length": 40,
+        "format-icons": {
+            "spotify": "",
+            "default": "🎜"
+        },
+        "escape": true,
+        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
+        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+    },
+    //"custom/power": {
+        "format" : "⏻ ",
+		"tooltip": false,
+		"menu": "on-click",
+		"menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
+		"menu-actions": {
+			"shutdown": "shutdown",
+			"reboot": "reboot",
+			"suspend": "systemctl suspend",
+			"hibernate": "systemctl hibernate"
+		}
+    }
+}

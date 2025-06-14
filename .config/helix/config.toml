@@ -1,0 +1,35 @@
+theme = "base16_default"
+
+[editor]
+completion-trigger-len = 1
+line-number  = "relative"
+auto-format  = false
+color-modes  = true
+popup-border = "all"
+end-of-line-diagnostics = "hint"
+
+[editor.cursor-shape]
+insert = "bar"
+
+[editor.soft-wrap]
+enable = true
+
+[editor.statusline]
+left        = ["mode", "spinner", "diagnostics"]
+center      = ["file-name"]
+right       = ["selections", "position", "file-type"]
+separator   = "│"
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "VISUAL"
+
+[editor.smart-tab]
+enable = false
+
+[editor.file-picker]
+hidden = true
+git-ignore = false
+
+[keys.normal]
+"ß" = "goto_next_diag"
+C-h = ":toggle lsp.display-inlay-hints"

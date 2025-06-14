@@ -1,0 +1,12 @@
+#!/bin/bash
+
+menu=$1
+
+hyprctl dispatch workspace empty
+
+sleep 2
+
+eval eval $menu
+
+# echo $menu > ~/.config/hypr/script/LoL.txt
+

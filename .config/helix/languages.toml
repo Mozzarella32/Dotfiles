@@ -1,0 +1,178 @@
+# [[language]]
+# file-types = [ "glsl", "frag", "vert", "geom", "fs", "vs", "gs", "comp" ]
+# name = "glsl"
+# formatter = { command = "C:/Dev/odin/glsl_formatter/glsl_formatter.exe", args = [] }
+# language-servers = [ "glsl-lsp" ]
+
+# [language-server.glsl-lsp]
+# command = "C:/Dev/odin/lsp/lsp.exe"
+# config = { }
+# environment = { }
+
+[[language]]
+name = "gas"
+scope = "source.llvm"
+roots = ["Makefile"]
+file-types = ["S", "s"]
+comment-token = "#"
+indent = { tab-width = 4, unit = "    " }
+language-servers = ["asm-lsp"]
+auto-format = true
+
+
+[[language]]
+name = "rust"
+auto-format = true
+
+roots = [
+  "Cargo.toml",
+  "Cargo.lock"
+]
+
+[language.auto-pairs]
+'(' = ')'
+'{' = '}'
+'[' = ']'
+'"' = '"'
+'`' = '`'
+
+[language-server.rust-analyzer]
+command = "rust-analyzer"
+
+[language-server.rust-analyzer.config]
+inlayHints.bindingModeHints.enable = false
+inlayHints.closingBraceHints.minLines = 10
+inlayHints.closureReturnTypeHints.enable = "with_block"
+inlayHints.discriminantHints.enable = "fieldless"
+inlayHints.lifetimeElisionHints.enable = "skip_trivial"
+inlayHints.typeHints.hideClosureInitialization = false
+
+
+[language-server]
+clangd = { command = "clangd" }
+
+[[language]]
+name = "cpp"
+auto-format = true
+
+
+[[grammar]]
+name = "cpp"
+source = { git = "https://github.com/tree-sitter/tree-sitter-cpp.git", rev = "56455f4245baf4ea4e0881c5169de69d7edd5ae7" }
+
+[[language]]
+name = "c"
+scope = "source.c"
+injection-regex = "c"
+file-types = ["c"]                                  # TODO: ["h"]
+comment-token = "//"
+block-comment-tokens = { start = "/*", end = "*/" }
+language-servers = ["clangd"]
+indent = { tab-width = 2, unit = "  " }
+auto-format = true
+formatter = { command = "clang-format" }
+
+[language.debugger]
+name = "lldb-dap"
+transport = "stdio"
+command = "lldb-dap"
+
+[[language.debugger.templates]]
+name = "binary"
+request = "launch"
+completion = [{ name = "binary", completion = "filename" }]
+args = { console = "internalConsole", program = "{0}" }
+
+[[language.debugger.templates]]
+name = "attach"
+request = "attach"
+completion = ["pid"]
+args = { console = "internalConsole", pid = "{0}" }
+
+[[language.debugger.templates]]
+name = "gdbserver attach"
+request = "attach"
+completion = [
+  { name = "lldb connect url", default = "connect://localhost:3333" },
+  { name = "file", completion = "filename" },
+  "pid",
+]
+args = { console = "internalConsole", attachCommands = [
+  "platform select remote-gdb-server",
+  "platform connect {0}",
+  "file {1}",
+  "attach {2}",
+] }
+
+[[grammar]]
+name = "c"
+source = { git = "https://github.com/tree-sitter/tree-sitter-c", rev = "7175a6dd5fc1cee660dce6fe23f6043d75af424a" }
+
+[[language]]
+name = "ocaml"
+formatter = { command = "ocamlformat", args = [
+  "-",
+  "--impl",
+  # "--enable-outside-detected-project", # Enable only if you want to format files outside of projects
+] }
+auto-format = true
+
+[[language]]
+name = "fish"
+formatter = { command = "fish_indent" }
+auto-format = true
+
+[[language]]
+name = "toml"
+formatter = { command = "taplo", args = ["format", "-"] }
+auto-format = true
+
+[[language]]
+name = "java"
+indent = { tab-width = 4, unit = "    " }
+formatter = { command = "google-java-format", args = ["-"] }
+auto-format = true
+
+
+# [[language]]
+# name = "java"
+# scope = "source.java"
+# injection-regex = "java"
+# file-types = ["java"]
+# roots = ["pom.xml"]
+# language-server = { command = "jdtls", args =[ 
+#     "java", 
+#     "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+#     "-Dosgi.bundles.defaultStartLevel=4",
+#     "-Declipse.product=org.eclipse.jdt.ls.core.product",
+#     "-Dlog.protocol=true",
+#     "-Dlog.level=ALL",
+#     "-Xms1g",
+#     "--add-modules=ALL-SYSTEM",
+#     "--add-opens java.base/java.util=ALL-UNNAMED",
+#     "--add-opens java.base/java.lang=ALL-UNNAMED",
+#     "-jar  /home/zack/.cache/jdtls_install/plugins/org.eclipse.equinox.launcher_1.14.0-202207211651.jar",
+#     "-configuration /home/zack/.cache/jdtls_install/config_linux"
+#     ] }
+# indent = { tab-width = 4, unit = "    " }
+
+
+# [[language]]
+# name = "java"
+# roots = ["pom.xml", "build.gradle"]
+# language-server = { command = "jdtls" }
+
+
+# [language-server.jdtls]
+# command = "jdtls"
+# args = ["--jvm-arg=-javaagent:/Users/myuser/.myconfigs/helix/dependencies/lombok-1.18.32.jar"]
+
+# [[grammar]]
+# name = "java"
+# source = { git = "https://github.com/tree-sitter/tree-sitter-java", rev = "bd6186c24d5eb13b4623efac9d944dcc095c0dad" }
+
+[[language]]
+name = "bash"
+indent = { tab-width = 4, unit = "    " }
+formatter = { command = 'shfmt', args = ["-i", "4"] }
+auto-format = true

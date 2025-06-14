@@ -46,5 +46,6 @@ if [ "$SHELL" != "$(command -v zsh)" ]; then
     chsh -s "$(command -v zsh)"
 fi
 
-copy_with_info dotfiles/archcraft.zsh-theme ~/.oh-my-zsh/custom/theme/archcraft.zsh-theme
+copy_with_info dotfiles/archcraft.zsh-theme ~/.oh-my-zsh/custom/themes/archcraft.zsh-theme
+
 echo "oh-my-zsh with Archcraft theme setup complete!"

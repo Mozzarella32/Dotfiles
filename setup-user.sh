@@ -24,3 +24,4 @@ link_with_info .config/waybar ~/.config/waybar
 link_with_info .config/kitty ~/.config/kitty
 link_with_info .config/hyprpanel ~/.config/hyprpanel
 link_with_info .config/background ~/.config/background
+link_with_info .config/wofi ~/.config/wofi

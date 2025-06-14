@@ -21,6 +21,7 @@ copy_with_info() {
 }
 
 copy_with_info dotfiles/.gitconfig ~/.gitconfig
+copy_with_info dotfiles/.zshrc ~/.zshrc
 
 set -e
 

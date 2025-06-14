@@ -12,15 +12,8 @@ copy_with_info() {
     DEST="$2"
 
     if [ -e "$DEST" ] || [ -L "$DEST" ]; then
-        read -p "File $DEST exists. Replace it? [j/N] " answer
-        answer=${answer,,}  # to lower-case
-        if [[ "$answer" == "j" ]]; then
-            echo "Removing existing: $DEST"
-            rm -rf "$DEST"
-        else
-            echo "Skipping $DEST"
-            return 0
-        fi
+        echo "Removing existing: $DEST"
+        rm -rf "$DEST"
     fi
 
     echo "Copying: $SRC → $DEST"

@@ -20,7 +20,6 @@ copy_with_info() {
     cp -r "$SRC" "$DEST"
 }
 
-copy_with_info dotfiles/.zshrc ~/.zshrc
 copy_with_info dotfiles/.gitconfig ~/.gitconfig
 
 set -e
@@ -40,5 +39,7 @@ if [ "$SHELL" != "$(command -v zsh)" ]; then
 fi
 
 copy_with_info dotfiles/archcraft.zsh-theme ~/.oh-my-zsh/custom/themes/archcraft.zsh-theme
+
+copy_with_info dotfiles/.zshrc ~/.zshrc
 
 echo "oh-my-zsh with Archcraft theme setup complete!"

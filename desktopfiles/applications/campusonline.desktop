@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=CampusOnline
+Exec=/home/Valentin/.config/hypr/script/StartCampusOnline.sh
+# Terminal=true
+Icon=/usr/share/icons/manuell/TUM.png
+Type=Application
+Categories=Tum; Uni

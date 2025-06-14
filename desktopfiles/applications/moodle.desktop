@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Moodle
+Exec=/home/Valentin/.config/hypr/script/StartMoodle.sh
+# Terminal=true
+Icon=/usr/share/icons/manuell/TUM.png
+Type=Application
+Categories=Tum; Uni

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=WhatsApp Web
+Exec=/home/Valentin/.config/hypr/script/StartWhatsAppWeb.sh
+# Terminal=true
+Icon=/usr/share/icons/manuell/whatsapp.png
+Type=Application
+Categories=Network;Chat;
+

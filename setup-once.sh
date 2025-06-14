@@ -29,4 +29,37 @@ copy_with_info() {
 
 copy_with_info dotfiles/.zshrc ~/.zshrc
 copy_with_info dotfiles/.gitconfig ~/.gitconfig
-copy_with_info dotfiles/.oh-my-zsh ~/.oh-my-zsh
+
+
+set -e
+
+# Check for zsh, install if missing (Arch/Manjaro example, adapt for your distro)
+# if ! command -v zsh >/dev/null 2>&1; then
+#     echo "zsh is not installed. Installing zsh..."
+#     if command -v pacman >/dev/null 2>&1; then
+#         sudo pacman -S --needed zsh
+#     elif command -v apt-get >/dev/null 2>&1; then
+#         sudo apt-get update && sudo apt-get install -y zsh
+#     else
+#         echo "Please install zsh manually."
+#         exit 1
+#     fi
+# fi
+
+# Install oh-my-zsh if not already installed
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing oh-my-zsh..."
+    export RUNZSH=no  # Don't launch zsh immediately after install
+    export CHSH=no    # Don't change shell automatically
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+    echo "oh-my-zsh is already installed."
+fi
+
+# Set zsh as default shell for current user if not already
+if [ "$SHELL" != "$(command -v zsh)" ]; then
+    echo "Changing default shell to zsh for user $USER..."
+    chsh -s "$(command -v zsh)"
+fi
+
+echo "oh-my-zsh setup complete!"

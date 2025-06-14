@@ -6,4 +6,7 @@
 
 ./setup-config.sh
 
+./setup-languages.sh
+
 ./setup-graphics.sh
+

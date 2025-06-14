@@ -32,7 +32,6 @@ copy_with_info dotfiles/.gitconfig ~/.gitconfig
 
 set -e
 
-
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo "Installing oh-my-zsh..."
     export RUNZSH=no
@@ -42,17 +41,10 @@ else
     echo "oh-my-zsh already installed."
 fi
 
-CUSTOM_THEME_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes"
-THEME_REPO="https://raw.githubusercontent.com/archcraft-os/archcraft-themes/main/oh-my-zsh/archcraft.zsh-theme"
-THEME_FILE="$CUSTOM_THEME_DIR/archcraft.zsh-theme"
-
-mkdir -p "$CUSTOM_THEME_DIR"
-echo "Downloading Archcraft oh-my-zsh theme..."
-curl -fsSL "$THEME_REPO" -o "$THEME_FILE"
-
 if [ "$SHELL" != "$(command -v zsh)" ]; then
     echo "Changing default shell to zsh for $USER..."
     chsh -s "$(command -v zsh)"
 fi
 
+copy_with_info dotfiles/archcraft.zsh-theme ~/.oh-my-zsh/custom/theme/
 echo "oh-my-zsh with Archcraft theme setup complete!"

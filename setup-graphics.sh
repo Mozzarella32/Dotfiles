@@ -38,5 +38,7 @@ rm -rf "$TMP_DIR"
 
 echo "SDDM Minecraft theme installed and enabled!"
 
+hyprland
+
 ./setup-ssh.sh
 

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-sudo pacman -S --needed waybar hyprland wofi kitty fzf zoxide ttf-jetbrains-mono-nerd hyprpaper helix firefox zsh timeshift wl-clipboard openssh sddm unzip bubblewrap
+sudo pacman -S --needed --noconfirm waybar hyprland wofi kitty fzf zoxide ttf-jetbrains-mono-nerd hyprpaper helix firefox zsh timeshift wl-clipboard openssh sddm unzip bubblewrap brightnessctl tk python3
 
 if ! command -v yay >/dev/null 2>&1; then
-    sudo pacman -S --needed git base-devel
+    sudo pacman -S --needed --noconfirm git base-devel
     git clone https://aur.archlinux.org/yay.git
     cd yay
     makepkg -si --noconfirm
@@ -11,4 +11,4 @@ if ! command -v yay >/dev/null 2>&1; then
     rm -rf yay
 fi
 
-yay -S --needed intellij-idea-ultimate-edition
+yay -S --needed --noconfirm intellij-idea-ultimate-edition

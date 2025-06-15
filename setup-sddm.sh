@@ -45,3 +45,6 @@ rm -rf "$TMP_DIR"
 
 echo "SDDM has been enabled and the minesddm theme from @Davi-S/sddm-theme-minesddm is now installed and set as default!"
 
+read
+
+systemctl start sddm

@@ -6,6 +6,4 @@
 
 ./setup-config.sh
 
-./setup-graphics.sh
-
-./setup-languages.sh
+./setup-sddm.sh

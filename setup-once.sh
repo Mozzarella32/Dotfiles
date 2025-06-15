@@ -1,5 +1,7 @@
 #!/bin/bash
 
+./setup-ssh.sh
+
 SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
 echo "Current Directory: $SCRIPT_DIR"
 
@@ -22,6 +24,8 @@ copy_with_info() {
 
 copy_with_info dotfiles/.gitconfig ~/.gitconfig
 copy_with_info dotfiles/.zshrc ~/.zshrc
+
+python3 "$SCRIPT_DIR/files/eduroam-linux-TUoMT.py"
 
 set -e
 

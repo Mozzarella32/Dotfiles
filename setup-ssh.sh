@@ -13,4 +13,3 @@ else
     ssh-keygen -t ed25519
 fi
 
-firefox https://artemis.tum.de/user-settings/ssh

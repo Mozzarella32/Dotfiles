@@ -18,11 +18,11 @@ link_with_info() {
     ln -s "$ZIEL" "$LINKNAME"
 }
 
-link_with_info .config/helix ~/.config/helix
-link_with_info .config/hypr ~/.config/hypr
-link_with_info .config/waybar ~/.config/waybar
-link_with_info .config/kitty ~/.config/kitty
-link_with_info .config/hyprpanel ~/.config/hyprpanel
-link_with_info .config/background ~/.config/background
-link_with_info .config/wofi ~/.config/wofi
-link_with_info .config/commit_all_and_push.sh ~/.config/commit_all_and_push.sh
+link_with_info dotfiles/.config/helix ~/.config/helix
+link_with_info dotfiles/.config/hypr ~/.config/hypr
+link_with_info dotfiles/.config/waybar ~/.config/waybar
+link_with_info dotfiles/.config/kitty ~/.config/kitty
+link_with_info dotfiles/.config/hyprpanel ~/.config/hyprpanel
+link_with_info dotfiles/.config/background ~/.config/background
+link_with_info dotfiles/.config/wofi ~/.config/wofi
+link_with_info dotfiles/.config/commit_all_and_push.sh ~/.config/commit_all_and_push.sh

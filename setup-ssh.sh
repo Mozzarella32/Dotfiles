@@ -3,7 +3,8 @@
 
 #!/bin/bash
 
-sudo cp ~/../.ssh ~/.ssh
+sudo cp -r ~/../.ssh ~/.ssh
+sudo chown Valentin ~/.ssh
 
 KEY="$HOME/.ssh/id_ed25519.pub"
 

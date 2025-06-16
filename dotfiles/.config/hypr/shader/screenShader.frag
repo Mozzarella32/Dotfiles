@@ -225,20 +225,21 @@ vec2 NormalizedUV(vec2 uv) {
 }
 
 float Spiral(vec2 uv) {
-    return 200.0 * length(uv) + 20.0 * atan(uv.x, uv.y) - 5.0 * time;
+    return 10.0*(uv.x + uv.y) + time;
+    // return 20.0 * length(uv) + 20.0 * atan(uv.x, uv.y) - 5.0 * time;
 }
 
 void main() {
-    // vec2 uv = NormalizedUV(v_texcoord);
+    vec2 uv = NormalizedUV(v_texcoord);
     // fragColor = vec4(Normalv_texcoord,0.0,0.0);
-    // fragColor = vec4(LiquidGlass(v_texcoord, GetRainbow(Spiral(uv))), 0.0);
+    // fragColor = vec4(LiquidGlass(uv, GetRainbow(Spiral(uv))), 0.0);
     // fragColor = vec4(LiquidGlass(v_texcoord, GetRainbow(0.5 * time)), 0.0);
     // fragColor = vec4(LiquidGlass(v_texcoord, vec3(1.0, 1.0, 1.0)), 0.0);
     //
     fragColor = vec4(GetPixel(v_texcoord), 1.0);
     // fragColor = vec4(GetPixel(vec2(0.5)+(v_texcoord-vec2(0.5)) * rot(0.0*sin(1.0*time)*sqrt(length(v_texcoord-vec2(0.5))))),1.0);
 
-    // fragColor = vec4(GetPixel(fract(3.0*sin(1.0*time)*v_texcoord)),0.0);
+    // fragColor = vec4(GetPixel(fract(3.0*v_texcoord)),0.0);
     // fragColor = vec4(Neon(GetPixel(v_texcoord)),0.0);
     // fragColor = vec4(Edge(v_texcoord),0.0);
     // fragColor = vec4(Blur(v_texcoord),0.0);

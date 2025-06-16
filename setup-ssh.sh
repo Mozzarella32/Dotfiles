@@ -3,6 +3,8 @@
 
 #!/bin/bash
 
+sudo cp ~/../.ssh ~/.ssh
+
 KEY="$HOME/.ssh/id_ed25519.pub"
 
 if [ -f "$KEY" ]; then
@@ -10,6 +12,6 @@ if [ -f "$KEY" ]; then
     exit 0
 else
     echo "Generating SSH-Key"
-    ssh-keygen -t ed25519
+    ssh-keygen -q -t ed25519 -f ~/.ssh/ed25519
 fi
 

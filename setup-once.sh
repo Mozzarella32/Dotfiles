@@ -25,8 +25,6 @@ copy_with_info() {
 copy_with_info dotfiles/.gitconfig ~/.gitconfig
 copy_with_info dotfiles/.zshrc ~/.zshrc
 
-python3 "$SCRIPT_DIR/files/eduroam-linux-TUoMT.py"
-
 set -e
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -38,10 +36,7 @@ else
     echo "oh-my-zsh already installed."
 fi
 
-if [ "$SHELL" != "$(command -v zsh)" ]; then
-    echo "Changing default shell to zsh for $USER..."
-    chsh -s "$(command -v zsh)"
-fi
+sudo usermod --shell /bin/zsh $(whoami)
 
 copy_with_info dotfiles/archcraft.zsh-theme ~/.oh-my-zsh/custom/themes/archcraft.zsh-theme
 

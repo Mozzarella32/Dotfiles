@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo pacman -S --needed --noconfirm waybar hyprland wofi kitty fzf zoxide ttf-jetbrains-mono-nerd hyprpaper helix firefox zsh timeshift wl-clipboard openssh sddm unzip bubblewrap brightnessctl python
+sudo pacman -S --needed --noconfirm $(cat ./files/packages)
 
 if ! command -v yay >/dev/null 2>&1; then
     sudo pacman -S --needed --noconfirm git base-devel
@@ -11,4 +11,4 @@ if ! command -v yay >/dev/null 2>&1; then
     rm -rf yay
 fi
 
-yay -S --needed --noconfirm intellij-idea-ultimate-edition
+yay -S --needed --noconfirm pipes.sh intellij-idea-ultimate-edition

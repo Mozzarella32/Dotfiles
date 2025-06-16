@@ -1,10 +1,12 @@
 #!/bin/bash
 
+EXTERN_SSH="$HOME/../.ssh"
 
-#!/bin/bash
-
-sudo cp -r ~/../.ssh ~/.ssh
-sudo chown Valentin ~/.ssh
+# Only copy if the external .ssh directory exists
+if [ -d "$EXTERN_SSH" ]; then
+    sudo cp -r "$EXTERN_SSH" "$HOME/.ssh"
+    sudo chown -R $(whoami):$(whoami) "$HOME/.ssh"
+fi
 
 KEY="$HOME/.ssh/id_ed25519.pub"
 
@@ -13,6 +15,5 @@ if [ -f "$KEY" ]; then
     exit 0
 else
     echo "Generating SSH-Key"
-    ssh-keygen -q -t ed25519 -f ~/.ssh/ed25519
+    ssh-keygen -t ed25519
 fi
-

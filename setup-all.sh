@@ -8,4 +8,5 @@
 
 ./setup-languages.sh
 
-./setup-sddm.sh
+hyprland
+# ./setup-sddm.sh

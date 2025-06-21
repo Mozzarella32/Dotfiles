@@ -8,5 +8,6 @@
 
 ./setup-languages.sh
 
-hyprland
-# ./setup-sddm.sh
+systemctl enable ly
+
+systemctl start ly

@@ -7,6 +7,8 @@ uniform vec2 screen_size;
 
 uniform float time;
 
+uniform vec2 pointer_position;
+
 // in int gl_PrimitiveID;
 out vec4 fragColor;
 

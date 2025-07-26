@@ -97,11 +97,11 @@
             "transition-left-to-right": false,
         },
         "modules": [
+            "custom/lock",
             "custom/power",
-            // "custom/quit",
-            // "custom/lock",
-            "custom/reboot",
-            "custom/suspend"
+            "custom/quit",
+            "custom/suspend",
+            "custom/reboot"
         ]
     },
     "custom/virtualKeyboard": {
@@ -111,8 +111,9 @@
         "on-click": "~/.config/hypr/script/ToggleVirtualKeyboard.sh" 
     },
     "custom/Wattage": {
-        //"exec": "cat '{printf \"%.1f W \", $1*10^-6}' /sys/class/power_supply/BAT1/power_now && ~/.config/hypr/script/UpdateShaderPowerProfile.sh > /dev/null",
-        "exec": "awk '{printf \"%.1f W \", $1*10^-6}' /sys/class/power_supply/BAT1/power_now && ~/.config/hypr/script/UpdateShaderPowerProfile.sh > /dev/null",
+        //"exec": "cat '{printf \"%.1f W \", $1*10^-6}' /sys/class/power_supply/BAT1/charge_now && ~/.config/hypr/script/UpdateShaderPowerProfile.sh > /dev/null",
+        //"exec": "awk '{printf \"%.1f W \", $1*10^-6}' /sys/class/power_supply/BAT0/charge_now && ~/.config/hypr/script/UpdateShaderPowerProfile.sh > /dev/null",
+        "exec": "awk '{printf \"%.1f W \", $1*10^-6}' /sys/class/power_supply/BAT0/charge_now",
         "interval": 2,
         "on-click": "~/.config/hypr/script/SwitchOrOpenWithTerminal.sh kitty btop"
     },
@@ -122,18 +123,18 @@
         "tooltip-format": "shutdown",
         "on-click": "shutdown now" 
     },
-    // "custom/quit": {
-    //     "format": "󰗼",
-    //     "tooltip": true,
-    //     "tooltip-format": "logout",
-    //     "on-click": "hyprctl dispatch exit"
-    // },
-    // "custom/lock": {
-    //     "format": "",
-    //     "tooltip": true,
-    //     "tooltip-format": "lock",
-    //     "on-click": "hyprlock"
-    // },
+    "custom/quit": {
+        "format": "󰗼 ",
+        "tooltip": true,
+        "tooltip-format": "logout",
+        "on-click": "hyprctl dispatch exit"
+    },
+    "custom/lock": {
+        "format": "",
+        "tooltip": true,
+        "tooltip-format": "lock",
+        "on-click": "hyprlock"
+    },
     "custom/suspend": {
             "format": "󰤄 ",
             "tooltip": true,
@@ -141,7 +142,7 @@
             "on-click": "systemctl suspend"   
     },
     "custom/reboot": {
-        "format": " 󰑓  ",
+        "format": "󰑓 ",
         "tooltip": true,
         "tooltip-format": "reboot",
         "on-click": "systemctl reboot"
@@ -152,15 +153,16 @@
         "on-click": "~/.config/hypr/script/StartInFirefoxAndSwitch.sh \"https://wiki.archlinux.org/title/Main_page\""
     },
     "custom/displayShader": {
-        "exec": "basename $(hyprctl getoption decoration:screen_shader | awk '{print $2}' || echo 'None')",
-        "interval": 2
+        "exec": "shader=$(hyprctl getoption decoration:screen_shader | awk '{print $2}'); if [[ -z $shader || $shader == '\"\"' ]]; then echo None; else basename \"$shader\" | sed -e 's/_noDamage\\.frag$//' -e 's/\\.frag$//'; fi",
+        //"exec": "basename $(hyprctl getoption decoration:screen_shader | awk '{print $2}' || echo 'None')",
+        "interval": 1
     },
     "custom/damageTracking": {
         "exec": "hyprctl getoption debug:damage_tracking | awk '{print $2}'",
-        "interval": 2
+        "interval": 1
     },
     "custom/space": {
-        "format": " ",
+        "format": " "
     },
     // Modules configuration
     "hyprland/workspaces": {
@@ -271,17 +273,17 @@
         "on-click": "~/.config/hypr/script/SwitchOrOpenWithTerminal.sh kitty btop"
     },
     "memory": {
-        "format-critical":  "<span color='#c20821'><b>{}% </b></span>",
-        "format-state-9":   "<span color='#d1151c'>{}% </span>",
-        "format-state-8":   "<span color='#df2b17'>{}% </span>",
-        "format-state-7":   "<span color='#eb4213'>{}% </span>",
-        "format-state-6":   "<span color='#f75b0e'>{}% </span>",
-        "format-state-5":   "<span color='#ff770a'>{}% </span>",
-        "format-state-4":   "<span color='#ffa100'>{}% </span>",
-        "format-state-3":   "<span color='#c6cc00'>{}% </span>",
-        "format-state-2":   "<span color='#8bd600'>{}% </span>",
-        "format-state-1":   "<span color='#52e000'>{}% </span>",
-        "format-state-0":   "<span color='#00ff00'>{}% </span>",
+        "format-critical":  "<span color='#c20821'>{}%  {swapPercentage}% 󰯍</span>",
+        "format-state-9":   "<span color='#d1151c'>{}%  {swapPercentage}% 󰯍</span>",
+        "format-state-8":   "<span color='#df2b17'>{}%  {swapPercentage}% 󰯍</span>",
+        "format-state-7":   "<span color='#eb4213'>{}%  {swapPercentage}% 󰯍</span>",
+        "format-state-6":   "<span color='#f75b0e'>{}%  {swapPercentage}% 󰯍</span>",
+        "format-state-5":   "<span color='#ff770a'>{}%  {swapPercentage}% 󰯍</span>",
+        "format-state-4":   "<span color='#ffa100'>{}%  {swapPercentage}% 󰯍</span>",
+        "format-state-3":   "<span color='#c6cc00'>{}%  {swapPercentage}% 󰯍</span>",
+        "format-state-2":   "<span color='#8bd600'>{}%  {swapPercentage}% 󰯍</span>",
+        "format-state-1":   "<span color='#52e000'>{}%  {swapPercentage}% 󰯍</span>",
+        "format-state-0":   "<span color='#00ff00'>{}%  {swapPercentage}% 󰯍</span>",
         "states": {
             "critical": 95,
             "state-9": 90,
@@ -295,12 +297,13 @@
             "state-1": 10,
             "state-0": 0
         },
+        "tooltip-format": "{used:.1f}Gb / {total:.1f}Gb, Swapp: {swapUsed:.1f}Gb / {swapTotal:.1f}Gb",
         "on-click": "~/.config/hypr/script/SwitchOrOpenWithTerminal.sh kitty btop"
     },
     "temperature": {
 	    "interval": 3,
         // "thermal-zone": 2,
-        "hwmon-path": "/sys/class/thermal/thermal_zone1/temp",
+        // "hwmon-path": "/sys/class/thermal/thermal_zone1/temp",
         "critical-threshold": 75,
         // "format-critical": "{temperatureC}°C {icon}",
         "format": "{temperatureC}°C {icon}",
@@ -344,7 +347,7 @@
         "balanced": " ",
         "power-saver": " "
       },
-      "on-click": "~/.config/hypr/script/UpdateShaderPowerProfile.sh"
+      // "on-click": "~/.config/hypr/script/UpdateShaderPowerProfile.sh"
     },
     "network": {
         //"interface": "wlp2*", // (Optional) To force the use of this interface

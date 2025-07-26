@@ -6,20 +6,32 @@ override_file="$(dirname "$0")/ShaderOverridePrevend"
 default_shader="$HOME/.config/hypr/shader/screenShader.frag"
 animated_shader="$HOME/.config/hypr/shader/animatedScreenShader.frag"
 wild_shader="$HOME/.config/hypr/shader/wildScreenShader.frag"
-
-hyprctl keyword debug:damage_tracking 2
-hyprctl keyword decoration:screen_shader "$default_shader"
-
- exit #disable the shader
-
-# Aktuellen Shader abrufen und Leerzeichen entfernen
-current_shader=$(hyprctl getoption decoration:screen_shader | awk '{print $NF}' | head -n 1)
+# cursor_shader="$HOME/.config/hypr/shader/cursorShader.frag"
+cursor_shader="$HOME/.config/hypr/shader/screenShader.frag"
 
 if [ -f "$override_file" ]; then
     hyprctl keyword decoration:screen_shader ""
     hyprctl keyword debug:damage_tracking 2
     exit
 fi
+
+
+# hyprctl keyword debug:damage_tracking 2
+# hyprctl keyword decoration:screen_shader ""
+
+#  exit #disable the shader
+
+# Aktuellen Shader abrufen und Leerzeichen entfernen
+current_shader=$(hyprctl getoption decoration:screen_shader | awk '{print $NF}' | head -n 1)
+
+if [ "$current_shader" = "$cursor_shader" ]; then
+    exit
+fi
+
+hyprctl keyword debug:damage_tracking 2
+hyprctl keyword decoration:screen_shader "$cursor_shader"
+
+    exit
 
 if [ "$(powerprofilesctl get)" = "power-saver" ]; then
     hyprctl keyword debug:damage_tracking 0

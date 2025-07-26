@@ -8,6 +8,9 @@ color-modes  = true
 popup-border = "all"
 end-of-line-diagnostics = "hint"
 
+# [editor.whitespace]
+# render = "all"
+
 [editor.cursor-shape]
 insert = "bar"
 

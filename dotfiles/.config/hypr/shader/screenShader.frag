@@ -5,9 +5,13 @@ in vec2 v_texcoord;
 uniform sampler2D tex;
 uniform vec2 screen_size;
 
+// uniform int cursor_shape;
+
 out vec4 fragColor;
 
-uniform float time;
+// uniform float time;
+
+// uniform vec2 pointer_position;
 
 #define M_PI 3.1415926535897932384626433832795
 
@@ -47,20 +51,63 @@ vec3 GetRainbow(float time) {
     return vec3((sin(time) + 1.0) / 2.0, (sin(time + 2.0 * M_PI / 3.0) + 1.0) / 2.0, (sin(time + 4.0 * M_PI / 3.0) + 1.0) / 2.0);
 }
 
+// vec3 GetRainbow(vec2 uv) {
+//     float off = (uv.x + uv.y) * 6.7 + 2.2;
+//     return vec3((sin(off) + 1.0) / 2.0, (sin(off + 2.0 * M_PI / 3.0) + 1.0) / 2.0, (sin(off + 4.0 * M_PI / 3.0) + 1.0) / 2.0);
+// }
+
+// vec3 GetPixel(vec2 uv) {
+
+//     // float off = (uv.x+uv.y) * 6.7+2.2;
+
+//     float Rainbow = isRainbow(uv);
+
+//     // vec3 RainbowColor = vec3((sin(off)+1.0)/2.0,(sin(off+2.0*M_PI/3.0)+1.0)/2.0,(sin(off+4.0*M_PI/3.0)+1.0)/2.0);
+
+//     return Rainbow * GetRainbow(uv) + (1.0 - Rainbow) * ReadPix(uv);
+// }
+
+vec3 ReadPixBilinear(vec2 uv) {
+    vec2 texSize = vec2(textureSize(tex, 0));
+    vec2 pixelPos = uv * texSize - 0.5;
+
+    vec2 iPos = floor(pixelPos);
+    vec2 fPos = fract(pixelPos);
+
+    vec2 uv00 = (iPos + vec2(0.0, 0.0)) / texSize;
+    vec2 uv10 = (iPos + vec2(1.0, 0.0)) / texSize;
+    vec2 uv01 = (iPos + vec2(0.0, 1.0)) / texSize;
+    vec2 uv11 = (iPos + vec2(1.0, 1.0)) / texSize;
+
+    vec3 c00 = texture(tex, uv00).rgb;
+    vec3 c10 = texture(tex, uv10).rgb;
+    vec3 c01 = texture(tex, uv01).rgb;
+    vec3 c11 = texture(tex, uv11).rgb;
+
+    vec3 cx0 = mix(c00, c10, fPos.x);
+    vec3 cx1 = mix(c01, c11, fPos.x);
+    vec3 cxy = mix(cx0, cx1, fPos.y);
+
+    return cxy;
+}
+
 vec3 GetRainbow(vec2 uv) {
     float off = (uv.x + uv.y) * 6.7 + 2.2;
-    return vec3((sin(off) + 1.0) / 2.0, (sin(off + 2.0 * M_PI / 3.0) + 1.0) / 2.0, (sin(off + 4.0 * M_PI / 3.0) + 1.0) / 2.0);
+    return vec3(
+        (sin(off) + 1.0) / 2.0,
+        (sin(off + 2.0 * M_PI / 3.0) + 1.0) / 2.0,
+        (sin(off + 4.0 * M_PI / 3.0) + 1.0) / 2.0
+    );
+}
+
+vec3 GetPixelBilinear(vec2 uv) {
+    float Rainbow = isRainbow(uv);
+    return Rainbow * GetRainbow(uv) + (1.0 - Rainbow) * ReadPixBilinear(uv);
 }
 
 vec3 GetPixel(vec2 uv) {
-
-    // float off = (uv.x+uv.y) * 6.7+2.2;
-
     float Rainbow = isRainbow(uv);
-
-    // vec3 RainbowColor = vec3((sin(off)+1.0)/2.0,(sin(off+2.0*M_PI/3.0)+1.0)/2.0,(sin(off+4.0*M_PI/3.0)+1.0)/2.0);
-
-    return Rainbow * GetRainbow(uv) + (1.0 - Rainbow) * ReadPix(uv);
+    return Rainbow * GetRainbow(uv) + (1.0 - Rainbow) * texture(tex,uv).rgb;
 }
 
 vec3 Blur(vec2 uv) {
@@ -170,8 +217,10 @@ float sdSegment(in vec2 p, in vec2 a, in vec2 b)
 }
 
 vec3 LiquidGlass(vec2 uv, vec3 Glass_Color) {
+    // float noise =
+    //     noise(vec3(10.0 * v_texcoord, 2.0 * time));
     float noise =
-        noise(vec3(10.0 * v_texcoord, 0.1 * time));
+        noise(vec3(10.0 * v_texcoord, 2.0));
     noise = clamp(noise, 0.5, 1.0) - 0.5;
     float Edge = 1.0 - 2.0 * noise;
     Edge = Edge * Edge;
@@ -212,7 +261,7 @@ vec3 LiquidGlass(vec2 uv, vec3 Glass_Color) {
 
     float colorPlus = mix(0.0, 0.4, noise != 0.0);
 
-    // float Highlight = max(10.0*EdgeDistance * dot(Light, gradient),0.5*EdgeDistance);
+    // float Highlight = max(10.0*EdgeDistance * dot(Light, grabc2e497ce4dd964e59bef81562ec2dient),0.5*EdgeDistance);
     float Highlight = 0.7 * EdgeDistance;
 
     return Pix + colorPlus * Glass_Color + Highlight * Glass_Color;
@@ -225,21 +274,69 @@ vec2 NormalizedUV(vec2 uv) {
 }
 
 float Spiral(vec2 uv) {
-    return 10.0*(uv.x + uv.y) + time;
+    return 10.0 * (uv.x + uv.y);
+    // return 10.0 * (uv.x + uv.y) + time;
     // return 20.0 * length(uv) + 20.0 * atan(uv.x, uv.y) - 5.0 * time;
 }
 
 void main() {
     vec2 uv = NormalizedUV(v_texcoord);
-    // fragColor = vec4(Normalv_texcoord,0.0,0.0);
+    // vec2 uv_pointer = NormalizedUV(pointer_position);
+
+    // fragColor = vec4(GetPixel(v_texcoord), 1.0);
+
+    // float d = 50.0*length(uv - uv_pointer);
+
+    // d = 1.0 - min(d,1.0);
+    // d += 0.3;
+
+    // d *= d;
+    // d *= d;
+    // d *= d;
+
+    // fragColor = vec4(mix(GetPixel(v_texcoord), GetRainbow(v_texcoord), d), 1.0);
+
+    // float a = float(cursor_shape) / 35.0;
+    
+    // fragColor = vec4(mix(GetPixel(v_texcoord), vec3(a), 0.5), 1.0);
+
+    // float d = 1.0*length(uv - uv_pointer);
+
+    // d = 1.0 - d;
+    // d += 0.1;
+
+    // d *= d;
+    // d *= d;
+    // d *= d;
+
+    // fragColor = vec4(mix(GetPixel(v_texcoord), GetRainbow(v_texcoord), d), 1.0);
+
+
+
+
+    // d = d * d;
+    // d = d * d;
+    // // d = d * d;
+    // // d = d * d;
+    // // d = d * d;
+    // // d = d * d;
+    // // d = d * d;
+
+    // d = 1.0 - d;
+
+    // fragColor = vec4(vec3(d),1.0);
+    // fragColor = vec4(GetPixel( ((v_texcoord-pointer_position)*d + pointer_position - vec2(0.5)) * rot(length(v_texcoord) + time) + vec2(0.5)),1.0);
+
+    // fragColor = vec4(mix(GetPixel(v_texcoord), vec3(1.0,0.0,0.0), step(0.5,pow(1.0-length(v_texcoord-pointer_position),100.0))), 1.0);
     // fragColor = vec4(LiquidGlass(uv, GetRainbow(Spiral(uv))), 0.0);
     // fragColor = vec4(LiquidGlass(v_texcoord, GetRainbow(0.5 * time)), 0.0);
     // fragColor = vec4(LiquidGlass(v_texcoord, vec3(1.0, 1.0, 1.0)), 0.0);
-    //
+
+    // fracColor = texture(tex, uv);
     fragColor = vec4(GetPixel(v_texcoord), 1.0);
     // fragColor = vec4(GetPixel(vec2(0.5)+(v_texcoord-vec2(0.5)) * rot(0.0*sin(1.0*time)*sqrt(length(v_texcoord-vec2(0.5))))),1.0);
 
-    // fragColor = vec4(GetPixel(fract(3.0*v_texcoord)),0.0);
+    // fragColor = vec4(GetPixel(frart(3.0*v_texcoord)),0.0);
     // fragColor = vec4(Neon(GetPixel(v_texcoord)),0.0);
     // fragColor = vec4(Edge(v_texcoord),0.0);
     // fragColor = vec4(Blur(v_texcoord),0.0);

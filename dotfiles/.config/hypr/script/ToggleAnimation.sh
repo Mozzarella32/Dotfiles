@@ -12,8 +12,8 @@ if [ -f "$toggle_file" ]; then
     # hyprctl keyword debug:damage_tracking 2
     # hyprctl keyword decoration:screen_shader "$default_shader"
 
-    if pgrep -f "pipes.sh" > /dev/null; then
-        pkill -f "pipes.sh"
+    if pgrep -f "pipes-rs" > /dev/null; then
+        pkill -f "pipes-rs"
     fi
     
     rm "$toggle_file"
@@ -22,18 +22,18 @@ else
     # hyprctl keyword debug:damage_tracking 0
     # hyprctl keyword decoration:screen_shader "$animated_shader"
 
-    # if ! pgrep -f "pipes.sh" > /dev/null; then
-    #     kitty -e pipes.sh 
+    # if ! pgrep -f "pipes-rs" > /dev/null; then
+    #     kitty -e pipes-rs 
     # fi
 
     CURRENT_WS=$(hyprctl activeworkspace -j | jq -r '.id')
 
-    PIPES_WINDOW=$(hyprctl clients -j | jq -r '.[] | select(.title | test("pipes.sh")) | .address')
+    PIPES_WINDOW=$(hyprctl clients -j | jq -r '.[] | select(.title | test("pipes-rs")) | .address')
 
     if [[ -n "$PIPES_WINDOW" ]]; then
         hyprctl dispatch movetoworkspace "$CURRENT_WS", address:$PIPES_WINDOW
     else
-        kitty -e pipes.sh &
+        kitty -e pipes-rs &
     fi
 
     touch "$toggle_file"

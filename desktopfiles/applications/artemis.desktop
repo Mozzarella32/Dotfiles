@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Artemis
-Exec=/home/Valentin/.config/hypr/script/StartArtemis.sh
-# Terminal=true
+Exec=/home/source/Dotfiles/dotfiles/.config/hypr/script/StartInFirefoxAndSwitch.sh https://artemis.tum.de/ 
 Icon=/usr/share/icons/manuell/artemis.png
 Type=Application
 Categories=Tum; Uni

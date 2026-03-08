@@ -244,16 +244,16 @@ void main() {
 
     // vec3 color = texture(tex,distorted).rgb;
 
-    // float d = length(distorted - 0.5);
-    // d *= 40.0;
-    // float scale = floor(d);
-    // scale = sqrt(scale + 10.0) - 2.0;
-    // d = floor(d);
-    // d = fract(d / 2.0);
-    // d *= 2.0;
-    // d -= 0.5;
+    float d = length(distorted - 0.5);
+    d *= 40.0;
+    float scale = floor(d);
+    scale = sqrt(scale + 10.0) - 2.0;
+    d = floor(d);
+    d = fract(d / 2.0);
+    d *= 2.0;
+    d -= 0.5;
 
-    // distorted = (distorted - 0.5) * rot(time * 1.55 * scale) + 0.5;
+    distorted = (distorted - 0.5) * rot(time * 1.55 * scale) + 0.5;
 
     vec3 color = ToRainbow(distorted, off);
 
@@ -266,5 +266,4 @@ void main() {
     // color = vec3(weight);
 
     fragColor.rgb = color;
-    // fragColor.b = 0.0;
 }

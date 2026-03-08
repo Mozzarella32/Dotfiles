@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=CampusOnline
-Exec=/home/Valentin/.config/hypr/script/StartCampusOnline.sh
+Exec=/home/source/Dotfiles/dotfiles/.config/hypr/script/StartInFirefoxAndSwitch.sh https://campus.tum.de/tumonline/ee/ui/ca2/app/desktop/#/home 
 # Terminal=true
 Icon=/usr/share/icons/manuell/TUM.png
 Type=Application

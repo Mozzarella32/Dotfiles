@@ -115,7 +115,7 @@ vec3 RotateColor(vec3 c, float angle) {
 //     // gl_FragColor = vec4(1.0) - pixColor;
 // }
 
-int MaxIter = 10;
+// int MaxIter = 10;
 
 float isRainbow(vec2 uv) {
     ivec2 texsize = textureSize(tex, 0);
@@ -144,14 +144,14 @@ vec3 ToRainbow(vec2 uv, float off) {
     return isRainbow * Rainbow + (1.0 - isRainbow) * color;
 }
 
-mat2 rot(float a) {
-    float s = sin(a);
-    float c = cos(a);
-    return mat2(
-        c, -s,
-        s, c
-    );
-}
+// mat2 rot(float a) {
+//     float s = sin(a);
+//     float c = cos(a);
+//     return mat2(
+//         c, -s,
+//         s, c
+//     );
+// }
 
 // vec3 DistortColor(vec3 color, float amount) {
 //     // Konvertiere RGB nach XYZ für eine bessere Farbverteilung
@@ -177,6 +177,37 @@ mat2 rot(float a) {
 //     return clamp(distortedColor, 0.0, 1.0);
 // }
 
+float mandelbrot(vec2 pos) {
+    pos.x -= 0.5;
+
+    float c = pos.x;
+    float d = pos.y;
+    float a = c;
+    float b = d;
+
+    int iterations = 100;
+    int i = 0;
+    for (; i < iterations; i++) {
+        if (a * a + b * b > 4.)
+            break;
+        float newa = a * a - b * b + c;
+        float newb = 2. * a * b + d;
+        a = newa;
+        b = newb;
+    }
+    return -pow(1.25, -float(i)) * pow(1.04, float(i));
+    //return Math.sqrt(1 - Math.pow(x - 1, 2));
+
+    //
+    // float h = (float(i) / float(iterations));
+    // h = sqrt(1 - (h - 1) * (h - 1));
+    // return h;
+}
+
+float movingMandelbrot(vec2 pos) {
+    return mandelbrot(((v_texcoord - vec2(0.5, 0.5) + 0.1 * vec2(cos(time), sin(time))) * screen_size / 500.));
+}
+
 void main() {
     vec2 uv = v_texcoord;
 
@@ -184,87 +215,104 @@ void main() {
 
     uv.y *= -1.0;
 
-    uv *= screen_size / 1000.0;
-
     float off = 1.0 * (uv.x + uv.y);
 
     // off *= 5.0;
 
     off += time * 0.1;
-    #ifdef Use_Weight
-    int iter = 0;
 
-    vec2 C = uv;
+    float m = movingMandelbrot(v_texcoord);
+    m *= 0.002;
 
-    // fragColor = vec4(uv,0.0,1.0);
+    vec2 coord = floor(v_texcoord / m) * m;
+    fragColor.rgb = m * vec3(1.0) + (1.0 - m) * ToRainbow(coord, off);
 
-    // return;
+    //     vec2 uv = v_texcoord;
 
-    // vec2 C = vec2(sin(time),cos(time));
+    //     uv = uv * 2.0 - 1.0;
 
-    // C *= 3.0;
+    //     uv.y *= -1.0;
 
-    // C.x -= 0.7;
+    //     uv *= screen_size / 1000.0;
 
-    vec2 Z = C;
+    //     float off = 1.0 * (uv.x + uv.y);
 
-    // float CTime = time *M_PI*2.0/3600.0;
+    //     // off *= 5.0;
 
-    float CTime = time;
+    //     off += time * 0.1;
+    //     #ifdef Use_Weight
+    //     int iter = 0;
 
-    C = vec2(sin(CTime), cos(CTime * 0.26));
+    //     vec2 C = uv;
 
-    // (a+bi)²+c+di
-    // a²+2abi-b²+c+di
-    // a²-b²+c +(2ab+d)i
+    //     // fragColor = vec4(uv,0.0,1.0);
 
-    while (iter < MaxIter && Z.x * Z.x + Z.y * Z.y < 4.0) {
-        iter++;
-        Z = vec2(Z.x * Z.x - Z.y * Z.y + C.x, 2.0 * Z.x * Z.y + C.y);
-    }
+    //     // return;
 
-    float weight = float(iter) / float(MaxIter);
+    //     // vec2 C = vec2(sin(time),cos(time));
 
-    // vec3 other = vec3(length(pixColor.rgb));//gray
+    //     // C *= 3.0;
 
-    // vec3 other = vec3(c);
+    //     // C.x -= 0.7;
 
-    // vec3 other = vec3(1.0)-pixColor.rgb;//invers
+    //     vec2 Z = C;
 
-    // vec3 other = RotateColor(pixColor.rgb,fract(time)*5.0);//HueRotate
+    //     // float CTime = time *M_PI*2.0/3600.0;
 
-    // fragColor = vec4(weight*other+(1.0-weight)*pixColor.rgb,1.0);
-    #endif
+    //     float CTime = time;
 
-    #ifdef Distored_Position
-    vec2 distorted = (1.0 + 0.45 * weight) * (v_texcoord - 0.5) + 0.5;
-    #else
-    vec2 distorted = v_texcoord;
-    #endif
+    //     C = vec2(sin(CTime), cos(CTime * 0.26));
 
-    // vec3 color = texture(tex,distorted).rgb;
+    //     // (a+bi)²+c+di
+    //     // a²+2abi-b²+c+di
+    //     // a²-b²+c +(2ab+d)i
 
-    // float d = length(distorted - 0.5);
-    // d *= 40.0;
-    // float scale = floor(d);
-    // scale = sqrt(scale + 10.0) - 2.0;
-    // d = floor(d);
-    // d = fract(d / 2.0);
-    // d *= 2.0;
-    // d -= 0.5;
+    //     while (iter < MaxIter && Z.x * Z.x + Z.y * Z.y < 4.0) {
+    //         iter++;
+    //         Z = vec2(Z.x * Z.x - Z.y * Z.y + C.x, 2.0 * Z.x * Z.y + C.y);
+    //     }
 
-    // distorted = (distorted - 0.5) * rot(time * 1.55 * scale) + 0.5;
+    //     float weight = float(iter) / float(MaxIter);
 
-    vec3 color = ToRainbow(distorted, off);
+    //     // vec3 other = vec3(length(pixColor.rgb));//gray
 
-    #ifdef Distored_Color
-    color = DistortColor(color, weight * 50.0);
-    #endif
+    //     // vec3 other = vec3(c);
 
-    // color = RotateColor(vec3(1.0,0.0,1.0),2.0*weight);
+    //     // vec3 other = vec3(1.0)-pixColor.rgb;//invers
 
-    // color = vec3(weight);
+    //     // vec3 other = RotateColor(pixColor.rgb,fract(time)*5.0);//HueRotate
 
-    fragColor.rgb = color;
-    // fragColor.b = 0.0;
+    //     // fragColor = vec4(weight*other+(1.0-weight)*pixColor.rgb,1.0);
+    //     #endif
+
+    //     #ifdef Distored_Position
+    //     vec2 distorted = (1.0 + 0.45 * weight) * (v_texcoord - 0.5) + 0.5;
+    //     #else
+    //     vec2 distorted = v_texcoord;
+    //     #endif
+
+    //     // vec3 color = texture(tex,distorted).rgb;
+
+    //     // float d = length(distorted - 0.5);
+    //     // d *= 40.0;
+    //     // float scale = floor(d);
+    //     // scale = sqrt(scale + 10.0) - 2.0;
+    //     // d = floor(d);
+    //     // d = fract(d / 2.0);
+    //     // d *= 2.0;
+    //     // d -= 0.5;
+
+    //     // distorted = (distorted - 0.5) * rot(time * 1.55 * scale) + 0.5;
+
+    //     vec3 color = ToRainbow(distorted, off);
+
+    //     #ifdef Distored_Color
+    //     color = DistortColor(color, weight * 50.0);
+    //     #endif
+
+    //     // color = RotateColor(vec3(1.0,0.0,1.0),2.0*weight);
+
+    //     // color = vec3(weight);
+
+    //     fragColor.rgb = color;
 }

@@ -50,13 +50,13 @@
         //"temperature",
         //"custom/brightness",
         //"backlight",
-        //"keyboard-state",
         //"hyprland/language",
         //"battery",
         //"battery#bat2",
         //"clock",
         "tray",
         //"custom/power"
+        "keyboard-state",
         "group/wifi",
         "group/hardware",
         "group/info",
@@ -347,7 +347,6 @@
         "balanced": " ",
         "power-saver": " "
       },
-      // "on-click": "~/.config/hypr/script/UpdateShaderPowerProfile.sh"
     },
     "network": {
         //"interface": "wlp2*", // (Optional) To force the use of this interface
@@ -365,7 +364,7 @@
         "format": "{volume}% {icon}{format_source}",
         "format-bluetooth": "{volume}% {icon}i {format_source}",
         "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
+        "format-muted": " 󰝟 {format_source}",
         "format-source": "{volume}% ",
         "format-source-muted": " ",
         "format-icons": {

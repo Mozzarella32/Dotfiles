@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+MimeType=text/x-matlab
+Exec=env QT_QPA_PLATFORM=xcb matlab -desktop -useStartupFolderPref
+Name=MATLAB
+Icon=matlab
+Categories=Development;Math;Science
+Comment=Scientific computing environment
+StartupNotify=true

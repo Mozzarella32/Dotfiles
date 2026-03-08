@@ -15,7 +15,8 @@ out vec4 fragColor;
 
 #define M_PI 3.1415926535897932384626433832795
 
-#define ReplaceThreshold 0.10
+// #define ReplaceThreshold 0.10
+#define ReplaceThreshold 0.07
 
 #define ReplaceColor 1.0,0.0,1.0
 // #define ReplaceColor 0.192,0.231,0.678

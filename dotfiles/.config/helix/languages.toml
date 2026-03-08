@@ -9,6 +9,11 @@
 # config = { }
 # environment = { }
 
+[[languages]]
+name = "nix"
+auto-format = true
+formatter.command = "nixfmt"
+
 [[language]]
 name = "gas"
 scope = "source.llvm"
@@ -29,13 +34,6 @@ roots = [
   "Cargo.lock"
 ]
 
-[language.auto-pairs]
-'(' = ')'
-'{' = '}'
-'[' = ']'
-'"' = '"'
-'`' = '`'
-
 [language-server.rust-analyzer]
 command = "rust-analyzer"
 
@@ -48,65 +46,9 @@ inlayHints.lifetimeElisionHints.enable = "skip_trivial"
 inlayHints.typeHints.hideClosureInitialization = false
 
 
-[language-server]
-clangd = { command = "clangd" }
-
 [[language]]
 name = "cpp"
 auto-format = true
-
-
-[[grammar]]
-name = "cpp"
-source = { git = "https://github.com/tree-sitter/tree-sitter-cpp.git", rev = "56455f4245baf4ea4e0881c5169de69d7edd5ae7" }
-
-[[language]]
-name = "c"
-scope = "source.c"
-injection-regex = "c"
-file-types = ["c"]                                  # TODO: ["h"]
-comment-token = "//"
-block-comment-tokens = { start = "/*", end = "*/" }
-language-servers = ["clangd"]
-indent = { tab-width = 2, unit = "  " }
-auto-format = true
-formatter = { command = "clang-format" }
-
-[language.debugger]
-name = "lldb-dap"
-transport = "stdio"
-command = "lldb-dap"
-
-[[language.debugger.templates]]
-name = "binary"
-request = "launch"
-completion = [{ name = "binary", completion = "filename" }]
-args = { console = "internalConsole", program = "{0}" }
-
-[[language.debugger.templates]]
-name = "attach"
-request = "attach"
-completion = ["pid"]
-args = { console = "internalConsole", pid = "{0}" }
-
-[[language.debugger.templates]]
-name = "gdbserver attach"
-request = "attach"
-completion = [
-  { name = "lldb connect url", default = "connect://localhost:3333" },
-  { name = "file", completion = "filename" },
-  "pid",
-]
-args = { console = "internalConsole", attachCommands = [
-  "platform select remote-gdb-server",
-  "platform connect {0}",
-  "file {1}",
-  "attach {2}",
-] }
-
-[[grammar]]
-name = "c"
-source = { git = "https://github.com/tree-sitter/tree-sitter-c", rev = "7175a6dd5fc1cee660dce6fe23f6043d75af424a" }
 
 [[language]]
 name = "ocaml"
@@ -176,3 +118,16 @@ name = "bash"
 indent = { tab-width = 4, unit = "    " }
 formatter = { command = 'shfmt', args = ["-i", "4"] }
 auto-format = true
+
+[[language]]
+name = "cpp"
+language-servers = ["clangd-custom"]
+
+[language-server.clangd-custom]
+command = "/home/Valentin/source/llvm-project/build/bin/clangd"
+# args =[
+#   "--background-index",
+#   "--pch-storage=memory",
+#   "-j",
+#   "8",
+# ]

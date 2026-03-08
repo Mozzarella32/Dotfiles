@@ -6,6 +6,7 @@ allow_images = true
 image_size = 20
 prompt=...
 normal_window = true
+term=kitty
 
 matching=fuzzy
 insensitive=true

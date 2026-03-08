@@ -21,11 +21,11 @@ link_with_info() {
 # cursor 
 link_with_info cursor/Bibata-My-Magenta /usr/share/icons/Bibata-My-Magenta
 
-# desktopfiles
-link_with_info desktopfiles/applications/whatsapp-web.desktop /usr/share/applications/whatsapp-web.desktop
-link_with_info desktopfiles/applications/artemis.desktop /usr/share/applications/artemis.desktop
-link_with_info desktopfiles/applications/moodle.desktop /usr/share/applications/moodle.desktop
-link_with_info desktopfiles/applications/campusonline.desktop /usr/share/applications/campusonline.desktop
+for desktopfile in "$SCRIPT_DIR"/desktopfiles/applications/*.desktop; do
+    basefile=$(basename "$desktopfile")
+    target="/usr/share/applications/$basefile"
+    link_with_info "desktopfiles/applications/$basefile" "$target"
+done
 
 # icons
 link_with_info desktopfiles/icons /usr/share/icons/manuell

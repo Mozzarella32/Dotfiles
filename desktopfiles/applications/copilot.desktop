@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Copilot
+Exec=/home/source/Dotfiles/dotfiles/.config/hypr/script/StartInFirefoxAndSwitch.sh https://github.com/copilot 
+Icon=/usr/share/icons/manuell/copilot.png
+Type=Application
+Categories=KI, github

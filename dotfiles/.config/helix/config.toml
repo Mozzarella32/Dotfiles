@@ -8,6 +8,9 @@ color-modes  = true
 popup-border = "all"
 end-of-line-diagnostics = "hint"
 
+[editor.inline-diagnostics]
+cursor-line = "hint"
+
 # [editor.whitespace]
 # render = "all"
 
@@ -31,8 +34,9 @@ enable = false
 
 [editor.file-picker]
 hidden = true
-git-ignore = false
+git-ignore = true
 
 [keys.normal]
 "ß" = "goto_next_diag"
 C-h = ":toggle lsp.display-inlay-hints"
+

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Zulip
+Exec=/home/source/Dotfiles/dotfiles/.config/hypr/script/StartInFirefoxAndSwitch.sh https://zulip.in.tum.de/ 
+Icon=/usr/share/icons/manuell/Zulip.png
+Type=Application
+Categories=Tum; Uni; Chat

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Hyprland-Config
+Exec=kitty helix ~/.config/hypr/hyprland.conf
+Icon=/usr/share/icons/manuell/Hyprland.png
+Type=Application
+Categories=Hyprland;Config

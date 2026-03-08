@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Moodle
-Exec=/home/Valentin/.config/hypr/script/StartMoodle.sh
+Exec=/home/source/Dotfiles/dotfiles/.config/hypr/script/StartInFirefoxAndSwitch.sh https://www.moodle.tum.de/my/ 
 # Terminal=true
 Icon=/usr/share/icons/manuell/TUM.png
 Type=Application

@@ -193,23 +193,31 @@ vec3 ColorScramble(vec2 uv) {
 
     float gridSize = 10.0;
     float onGridSize = 5.0;
-    float onPercent = 0.4;
+    float onPercent = 0.2;
 
     vec2 coord = uv * screen_size / gridSize;
     vec2 idx = floor(coord);
     vec2 off = fract(coord);
 
     float noiseCorse = cnoise(1.0 / onGridSize * vec3(idx, 10.0 * time));
-    float noise = cnoise(1.0 * vec3(idx, time));
-    float noisex = cnoise(1.0 * vec3(idx + vec2(1.0, 0.0), time));
-    float noisey = cnoise(1.0 * vec3(idx + vec2(0.0, 1.0), time));
+    // float noise = cnoise(1.0 * vec3(idx, time));
+    float seed = fract(floor(time * 10.0) / 10.0);
+    lcg(seed);
+    lcg(seed);
+    vec2 roff = vec2(cnoise(1.0 * vec3(idx + vec2(randRange(seed, -1000.0, 1000.0), randRange(seed, -1000.0, 1000.0)), 0.0)), cnoise(1.0 * vec3(idx + vec2(randRange(seed, -1000.0, 1000.0), randRange(seed, -1000.0, 1000.0)), 0.0)));
+    vec2 goff = vec2(cnoise(1.0 * vec3(idx + vec2(randRange(seed, -1000.0, 1000.0), randRange(seed, -1000.0, 1000.0)), 0.0)), cnoise(1.0 * vec3(idx + vec2(randRange(seed, -1000.0, 1000.0), randRange(seed, -1000.0, 1000.0)), 0.0)));
+    vec2 boff = vec2(cnoise(1.0 * vec3(idx + vec2(randRange(seed, -1000.0, 1000.0), randRange(seed, -1000.0, 1000.0)), 0.0)), cnoise(1.0 * vec3(idx + vec2(randRange(seed, -1000.0, 1000.0), randRange(seed, -1000.0, 1000.0)), 0.0)));
 
-    vec2 noiseOff = floor(1.0 * vec2(noise - noisex, noise - noisey));
     if (clamp(1.0 / (2.0 * onPercent) * (noiseCorse - 1.0) + 1.0, 0.0, 1.0) == 0.0) {
-        noiseOff = vec2(0.0);
+    // if( uv.x < 0.5) {
+        roff = vec2(0.0);
+        goff = vec2(0.0);
+        boff = vec2(0.0);
     }
-    color.r = ToRainbow((idx + vec2(noiseOff.x, 0.0) + off) / screen_size * gridSize).r;
-    color.g = ToRainbow((idx + vec2(0.0, noiseOff.y) + off) / screen_size * gridSize).g;
+
+    color.r = ToRainbow((idx + 2.0 * roff + off) / screen_size * gridSize).r;
+    color.g = ToRainbow((idx + 2.0 * goff + off) / screen_size * gridSize).g;
+    color.b = ToRainbow((idx + 2.0 * boff + off) / screen_size * gridSize).b;
 
     return color;
 }
@@ -217,33 +225,15 @@ vec3 ColorScramble(vec2 uv) {
 void main() {
     vec2 tc = v_texcoord;
 
-    float dx = abs(tc.x - 0.5);
-    float dy = abs(tc.y - 0.5);
-
-    dx *= dx;
-    dy *= dy;
-
-    tc.x -= 0.5;
-    tc.x *= 1.0 + (dy * 0.25);
-    tc.x += 0.5;
-
-    tc.y -= 0.5;
-    tc.y *= 1.0 + (dx * 0.25);
-    tc.y += 0.5;
-    // tc = v_texcoord;
+    vec2 center = abs(tc - 0.5);
+    tc -= 0.5;
+    tc *= 1.0 + (center * center).yx * vec2(0.25, 0.25);
+    tc += 0.5;
 
     float scanline = sin(tc.y * 1200.0) * 0.02;
 
-    // tc -= 0.5;
-    // tc *= 1.1;
-    // tc += 0.5;
     if (tc.y > 1.0 || tc.x < 0.0 || tc.x > 1.0 || tc.y < 0.0) {
-        // if (tc.y > 1.1 || tc.x < -0.1 || tc.x > 1.1 || tc.y < -0.1) {
-        //     fragColor = vec4(0.0);
-        // }
-        // else {
-            fragColor = vec4(0.1);
-        // }
+        fragColor = vec4(0.0);
         return;
     }
 
@@ -253,7 +243,7 @@ void main() {
     float y = tc.y;
     float a = time * 0.35;
     float x = y - a;
-    float seed = 1000.0 * float(int(0.25 * time));
+    float seed = fract(1000.0 * float(int(0.25 * time)));
     lcg(seed);
     lcg(seed);
     lcg(seed);

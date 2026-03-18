@@ -14,7 +14,7 @@
         //"custom/media"
         "group/workspaces",
         "group/audio",
-        "group/debug"          
+        "group/debug",
     ],
     "group/workspaces": {
         "orientation": "inherit",
@@ -33,7 +33,7 @@
         "orientation": "inherit",
         "modules": [
             "custom/displayShader",
-            "custom/damageTracking"
+            "custom/damageTracking",
         ]
     },
     "modules-center": [
@@ -66,7 +66,8 @@
         "orientation": "inherit",
         "modules": [
             "mpd",// don't know
-            "network"
+            "network",
+            "custom/updates"
         ]
     },
     "group/hardware": {
@@ -75,7 +76,9 @@
             "cpu",
             "memory",
             "temperature",
-            "custom/Wattage"
+            "custom/Wattage",
+            "custom/updates",
+            "disk"
         ]
     },
     "group/info": {
@@ -378,10 +381,51 @@
         },
         "on-click": "pavucontrol"
     },
+    "disk": {
+        "format": "{percentage_used}% 󱛟 ",
+        "tooltip": false,
+        "interval": 2,
+        "format-critical": "<span color='#c20821'><b>{percentage_used}% 󱛟 </b></span>",
+        "format-state-9":   "<span color='#d1151c'>{percentage_used}% 󱛟 </span>",
+        "format-state-8":   "<span color='#df2b17'>{percentage_used}% 󱛟 </span>",
+        "format-state-7":   "<span color='#eb4213'>{percentage_used}% 󱛟 </span>",
+        "format-state-6":   "<span color='#f75b0e'>{percentage_used}% 󱛟 </span>",
+        "format-state-5":   "<span color='#ff770a'>{percentage_used}% 󱛟 </span>",
+        "format-state-4":   "<span color='#ffa100'>{percentage_used}% 󱛟 </span>",
+        "format-state-3":   "<span color='#c6cc00'>{percentage_used}% 󱛟 </span>",
+        "format-state-2":   "<span color='#8bd600'>{percentage_used}% 󱛟 </span>",
+        "format-state-1":   "<span color='#52e000'>{percentage_used}% 󱛟 </span>",
+        "format-state-0":   "<span color='#00ff00'>{percentage_used}% 󱛟 </span>",
+        "states": {
+            "critical": 98,
+            "state-9": 96,
+            "state-8": 94,
+            "state-7": 92,
+            "state-6": 90,
+            "state-5": 88,
+            "state-4": 86,
+            "state-3": 84,
+            "state-2": 82,
+            "state-1": 80,
+            "state-0": 0,
+        },
+        "on-click": "xdg-open 'file:////'",
+        "folder": "/", // Specify the directory to check, adjust if needed
+    },
     "custom/window_type": {
         "exec": "~/.config/hypr/script/RunnesOnX.sh",
         "interval": 1,
         "return-type": "plain"
+    },
+    "custom/updates": {
+        "format": "{}",
+        "return-type": "json",
+        "escape": true,
+        "tooltip": true,
+        "exec": "~/.config/waybar/scripts/check_updates.sh",
+        "interval": 60,
+        "hide-empty-text": true,
+        "on-click": "~/.config/waybar/scripts/update_system.sh"
     },
     //"custom/brightness": {
         //"tooltip": true,

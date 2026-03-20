@@ -8,6 +8,8 @@
     // Choose the order of the modules
     "margin-left": 6,
     "margin-right": 6,
+    "position": "top",
+    // "position": "bottom",
     "modules-left": [
         //"sway/mode",
         //"sway/scratchpad",

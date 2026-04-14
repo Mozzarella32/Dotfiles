@@ -1,0 +1,10 @@
+[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = linux
+
+[Action]
+Description = Sign kernel for Secure Boot
+When = PostTransaction
+Exec = /usr/bin/sh -c '/usr/bin/sbsign --key /root/secure-boot/MOK.key --cert /root/secure-boot/MOK.crt --output /boot/arch/vmlinuz-linux.signed /boot/arch/vmlinuz-linux || echo "sbsign failed for kernel"'

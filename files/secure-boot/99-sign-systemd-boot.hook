@@ -1,0 +1,11 @@
+[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = systemd
+
+[Action]
+Description = Copy and sign systemd-boot into EFI/archshim
+When = PostTransaction
+Exec = /usr/bin/sh -c '/usr/bin/sbsign --key /root/secure-boot/MOK.key --cert /root/secure-boot/MOK.crt --output "/boot/EFI/archshim/grubx64.efi" "/usr/lib/systemd/boot/efi/systemd-bootx64.efi" || echo "sbsign failed for systemd-boot"'
+

@@ -11,4 +11,4 @@ if ! command -v yay >/dev/null 2>&1; then
     rm -rf yay
 fi
 
-yay -S --needed --noconfirm $(cat ./files/packages-aur) intellij-idea-ultimate-edition
+yay -S --needed --noconfirm $(cat ./files/packages-aur)

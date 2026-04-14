@@ -281,7 +281,9 @@ float Spiral(vec2 uv) {
 }
 
 void main() {
-    vec2 uv = NormalizedUV(v_texcoord);
+    // vec2 uv = NormalizedUV(v_texcoord);
+    // uv.x *= 1.1;
+    // uv.x += 0.1;
     // vec2 uv_pointer = NormalizedUV(pointer_position);
 
     // fragColor = vec4(GetPixel(v_texcoord), 1.0);
@@ -334,7 +336,10 @@ void main() {
     // fragColor = vec4(LiquidGlass(v_texcoord, vec3(1.0, 1.0, 1.0)), 0.0);
 
     // fracColor = texture(tex, uv);
-    fragColor = vec4(GetPixel(v_texcoord), 1.0);
+    vec2 uv = v_texcoord;
+    uv.x *= 0.975;
+    uv.x += 0.025;
+    fragColor = vec4(GetPixel(uv), 1.0);
     // fragColor = vec4(GetPixel(vec2(0.5)+(v_texcoord-vec2(0.5)) * rot(0.0*sin(1.0*time)*sqrt(length(v_texcoord-vec2(0.5))))),1.0);
 
     // fragColor = vec4(GetPixel(frart(3.0*v_texcoord)),0.0);

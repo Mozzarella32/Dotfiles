@@ -193,7 +193,7 @@ vec3 ColorScramble(vec2 uv) {
 
     float gridSize = 10.0;
     float onGridSize = 5.0;
-    float onPercent = 0.2;
+    float onPercent = 0.0;
 
     vec2 coord = uv * screen_size / gridSize;
     vec2 idx = floor(coord);

@@ -13,8 +13,9 @@ out vec4 fragColor;
 
 // #define ReplaceThreshold 0.4
 // #define ReplaceColor 0.0,0.0,0.0
-#define ReplaceThreshold 0.3
+#define ReplaceThreshold 0.1
 #define ReplaceColor 1.0,0.0,1.0
+// #define ReplaceColor 0.0,0.0,0.0
 
 // #define Distored_Position
 // #define Distored_Color
@@ -265,6 +266,14 @@ void main() {
 
     // color = vec3(weight);
 
+    float tolteranz = 0.00;
+    if (length(color - vec3(0)) < tolteranz) {
+        color = color - vec3(1);
+    } else
+    if (length(color - vec3(1)) < tolteranz) {
+        color = vec3(1) - color;
+    }
     fragColor.rgb = color;
+
     // fragColor.b = 0.0;
 }

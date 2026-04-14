@@ -34,16 +34,9 @@ uniform bool pointer_killing;
 
 // These can be used to make window borders etc. be overdrawn
 // (not recommended for text becaus it destroys antialiasing)
+
 #define ReplaceThreshold 0.10
 #define ReplaceColor 1.0,0.0,1.0
-
-// Define to use blur inside the cursor
-// (recommended to only use for show as it is not good for performance)
-#define BLUR
-
-// Display all shaders in a 7 * 5 matrix
-// #define ALLSHAPESDEMO
-// #define ALLSHAPESDEMOTRANSITIONS
 
 vec2 NormalizedUV(vec2 uv) {
     return uv * screen_size;
@@ -65,7 +58,7 @@ vec3 GetRainbow(float time) {
 }
 
 vec3 GetRainbow(vec2 uv) {
-    float off = (uv.x + uv.y) * 6.7 + 2.2 + 0.5 * time;
+    float off = 3.0 * time;
     return vec3(
         (sin(off) + 1.0) / 2.0,
         (sin(off + 2.0 * M_PI / 3.0) + 1.0) / 2.0,
@@ -73,91 +66,10 @@ vec3 GetRainbow(vec2 uv) {
     );
 }
 
-bool doDistort = false;
-
-void setupDoDistort() {
-    doDistort = false;
-    return;
-    for (int i = 0; i < pointer_pressed_times.length(); i++) {
-        float t = pointer_pressed_times[i];
-        if (t <= 5.0) {
-            doDistort = true;
-            break;
-        }
-    }
-}
-
-void Distort(vec2 uv, out vec2 distort, out float redness) {
-    redness = 0.0;
-    distort = vec2(0);
-
-    if (!doDistort) {
-        distort = uv;
-        return;
-    }
-    vec2 uvNorm = NormalizedUV(uv);
-
-    for (int i = 0; i < pointer_pressed_times.length(); i++) {
-        float t = pointer_pressed_times[i];
-
-        vec2 pos = pointer_pressed_positions[i];
-
-        vec2 diff = uvNorm - NormalizedUV(pos);
-
-        float d = 0.02 * length(diff) - 20.0 * t;
-
-        d = 1.0 - 0.5 / exp(d * d);
-
-        redness = max(redness, 1.5 * float((pointer_pressed_killed >> i) & 1) * (1.0 - d));
-        distort += d * (uv - pos) + pos;
-    }
-    distort /= float(pointer_pressed_times.length());
-}
-
-float sdClickPoints(vec2 uv) {
-    vec2 uvNorm = NormalizedUV(uv);
-
-    float sd = INF;
-
-    if (!doDistort) {
-        return sd;
-    }
-
-    for (int i = 0; i < pointer_pressed_times.length(); i++) {
-        float t = pointer_pressed_times[i];
-
-        vec2 pos = pointer_pressed_positions[i];
-
-        vec2 diff = uvNorm - NormalizedUV(pos);
-        if (((pointer_pressed_touched >> i) & 1) == 1) {
-            sd = min(sd, length(diff) + 40.0 * t - 20.0);
-        }
-    }
-    return sd;
-}
-
 vec3 GetPixel(vec2 uv) {
-    float redness;
-    vec2 distort;
-
-    Distort(uv, distort, redness);
-
-    float Rainbow = isRainbow(distort);
-    vec3 col = Rainbow * GetRainbow(distort) + (1.0 - Rainbow) * texture(tex, distort).rgb;
-    return mix(col, vec3(1.0, 0.0, 0.0), redness);
-}
-
-vec3 Blur(vec2 uv) {
-    ivec2 texsize = textureSize(tex, 0);
-    vec2 texelsize = vec2(1.0) / vec2(texsize.x, texsize.y);
-
-    vec3 Color = vec3(0);
-    for (int x = -1; x <= 1; x++) {
-        for (int y = -1; y <= 1; y++) {
-            Color += GetPixel(uv + texelsize * vec2(x, y));
-        }
-    }
-    return Color / 8.0;
+    float Rainbow = isRainbow(uv);
+    vec3 col = Rainbow * GetRainbow(uv) + (1.0 - Rainbow) * texture(tex, uv).rgb;
+    return col;
 }
 
 mat2 rot(float a) {
@@ -269,6 +181,21 @@ float sdArc(in vec2 p, in vec2 sc, in float ra, float rb) {
     return ((sc.y * p.x > sc.x * p.y) ? length(p - sc * ra) :
     abs(length(p) - ra)) - rb;
 }
+
+float sdTriangle( in vec2 p, in vec2 p0, in vec2 p1, in vec2 p2 )
+{
+    vec2 e0 = p1-p0, e1 = p2-p1, e2 = p0-p2;
+    vec2 v0 = p -p0, v1 = p -p1, v2 = p -p2;
+    vec2 pq0 = v0 - e0*clamp( dot(v0,e0)/dot(e0,e0), 0.0, 1.0 );
+    vec2 pq1 = v1 - e1*clamp( dot(v1,e1)/dot(e1,e1), 0.0, 1.0 );
+    vec2 pq2 = v2 - e2*clamp( dot(v2,e2)/dot(e2,e2), 0.0, 1.0 );
+    float s = sign( e0.x*e2.y - e0.y*e2.x );
+    vec2 d = min(min(vec2(dot(pq0,pq0), s*(v0.x*e0.y-v0.y*e0.x)),
+                     vec2(dot(pq1,pq1), s*(v1.x*e1.y-v1.y*e1.x))),
+                     vec2(dot(pq2,pq2), s*(v2.x*e2.y-v2.y*e2.x)));
+    return -sqrt(d.x)*sign(d.y);
+}
+
 // Credit to Inigo Quilez for making all these wonderfull sdfs obove
 
 // From: https://www.shadertoy.com/view/tcsyWs
@@ -523,10 +450,14 @@ float sdAlias(vec2 diff) {
     );
 }
 
+float sdDefault(vec2 diff) {
+    return sdTriangle(diff, vec2(0.0,0.0), vec2(0.0, 1.0) * 12.0, vec2(cos(1.70*M_PI), -sin(1.70*M_PI))*12.0);
+}
+
 float CursorSDF(vec2 uv, vec2 uv_pointer, int shape) {
     vec2 diff = uv - uv_pointer;
 
-    diff /= (pointer_size / 48.0);
+    diff /= (pointer_size / 24.0);
 
     if (pointer_hidden) {
         return INF;
@@ -536,7 +467,7 @@ float CursorSDF(vec2 uv, vec2 uv_pointer, int shape) {
         case 0: //invalid
         return sdHelp(diff, 1.0);
         case 1: //default
-        return length(diff) - 10.0;
+        return sdDefault(diff);
         case 2: //context-menu
         return sdContext_menu(diff);
         case 3: //help
@@ -614,12 +545,7 @@ float Cursor() {
 
     vec2 uv_pointer = NormalizedUV(pointer_position);
 
-    float redness;
-    vec2 distort;
-
-    Distort(v_texcoord, distort, redness);
-
-    uv = NormalizedUV(distort);
+    uv = NormalizedUV(v_texcoord);
 
     #ifndef ALLSHAPESDEMO
 
@@ -683,7 +609,6 @@ vec3 HiddingBlend(vec2 uv) {
     vec2 uv_n = NormalizedUV(v_texcoord);
     vec2 uv_pointer = NormalizedUV(pointer_position);
     float sd = Cursor();
-    sd = sdUnion(sd, sdClickPoints(uv));
     sd = mix(sd, length(uv_n - uv_pointer), 1.0 - tdiff);
 
     vec3 col = Style(uv, sd, GetRainbow(uv));
@@ -714,7 +639,5 @@ vec3 MurderBlend(vec2 uv) {
 }
 
 void main() {
-    setupDoDistort();
-
     fragColor = vec4(MurderBlend(v_texcoord), 1.0);
 }

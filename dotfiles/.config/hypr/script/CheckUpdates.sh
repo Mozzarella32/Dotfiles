@@ -16,6 +16,8 @@ if [ "$TOTAL" -gt 0 ]; then
         [ -n "$OUTPUT" ] && OUTPUT+=" "
         OUTPUT+="󰚰 $AUR"
     fi
+
+    hyprctl notify 1 5000 "rgb(ff00ff)" "Updates: $OUTPUT" &
     
     echo "{\"text\": \"$OUTPUT\", \"tooltip\": \"Official: $OFFICIAL\\nAUR: $AUR\"}"
 else

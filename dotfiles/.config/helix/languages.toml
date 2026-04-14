@@ -124,7 +124,8 @@ name = "cpp"
 language-servers = ["clangd-custom"]
 
 [language-server.clangd-custom]
-command = "/home/Valentin/source/llvm-project/build/bin/clangd"
+# command = "/home/Valentin/source/llvm-project/build/bin/clangd"
+command = "clangd"
 # args =[
 #   "--background-index",
 #   "--pch-storage=memory",

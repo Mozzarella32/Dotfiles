@@ -526,7 +526,7 @@ float sdAlias(vec2 diff) {
 float CursorSDF(vec2 uv, vec2 uv_pointer, int shape) {
     vec2 diff = uv - uv_pointer;
 
-    diff /= (pointer_size / 48.0);
+    diff /= (pointer_size / 12.0);
 
     if (pointer_hidden) {
         return INF;
@@ -715,6 +715,11 @@ vec3 MurderBlend(vec2 uv) {
 
 void main() {
     setupDoDistort();
+
+    // vec2 newUv = v_texcoord;
+    // newUv -= pointer_position;
+    // newUv *= 1.0 / (time * time);
+    // newUv += pointer_position;
 
     fragColor = vec4(MurderBlend(v_texcoord), 1.0);
 }

@@ -209,7 +209,7 @@ vec3 ColorScramble(vec2 uv) {
     vec2 boff = vec2(cnoise(1.0 * vec3(idx + vec2(randRange(seed, -1000.0, 1000.0), randRange(seed, -1000.0, 1000.0)), 0.0)), cnoise(1.0 * vec3(idx + vec2(randRange(seed, -1000.0, 1000.0), randRange(seed, -1000.0, 1000.0)), 0.0)));
 
     if (clamp(1.0 / (2.0 * onPercent) * (noiseCorse - 1.0) + 1.0, 0.0, 1.0) == 0.0) {
-    // if( uv.x < 0.5) {
+        // if( uv.x < 0.5) {
         roff = vec2(0.0);
         goff = vec2(0.0);
         boff = vec2(0.0);
@@ -263,5 +263,6 @@ void main() {
     seed *= v_texcoord.y;
     seed += v_texcoord.y;
     lcg(seed);
-    fragColor.rgb += scanline * pow(randRange(seed, 0.5, 2.0), 2.0);
+    fragColor.rgb += scanline * randRange(seed, 0.5, 2.0);
+    // fragColor.rgb += scanline * pow(randRange(seed, 0.5, 2.0), 2.0);
 }

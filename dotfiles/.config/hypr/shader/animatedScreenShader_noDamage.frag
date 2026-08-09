@@ -8,6 +8,7 @@ uniform vec2 screen_size;
 uniform float time;
 
 out vec4 fragColor;
+uniform vec2 pointer_position;
 
 #define M_PI 3.1415926535897932384626433832795
 
@@ -178,7 +179,66 @@ mat2 rot(float a) {
 //     return clamp(distortedColor, 0.0, 1.0);
 // }
 
+vec3 GetRainbow(vec2 uv) {
+    float off = (uv.x + uv.y) * 6.7 + 2.2;
+    return vec3(
+        (sin(off) + 1.0) / 2.0,
+        (sin(off + 2.0 * M_PI / 3.0) + 1.0) / 2.0,
+        (sin(off + 4.0 * M_PI / 3.0) + 1.0) / 2.0
+    );
+}
+
+vec3 GetPixel(vec2 uv) {
+    float Rainbow = isRainbow(uv);
+    return Rainbow * GetRainbow(uv) + (1.0 - Rainbow) * texture(tex, uv).rgb;
+}
+
+vec3 LowPass(vec2 uv) {
+    ivec2 texsize = textureSize(tex, 0);
+    vec2 texelsize = vec2(1.0) / vec2(texsize.x, texsize.y);
+
+    vec3 Color = vec3(0);
+    for (int x = -2; x <= 2; x++) {
+        for (int y = -2; y <= 2; y++) {
+            Color += GetPixel(uv + texelsize * vec2(x, y));
+        }
+    }
+    return Color / 100.0;
+}
+
+vec3 HighPass(vec2 uv) {
+    return GetPixel(uv) - LowPass(uv);
+}
+
+vec3 Strange(vec2 uv) {
+    uv *= screen_size;
+    uv = fract(uv / 20.0);
+    if (uv.x < 0.1 || uv.x > 0.9 || uv.y < 0.1 || uv.y > 0.9) {
+        return vec3(0.0, 0.0, 0.0);
+    }
+    return vec3(1.0, 1.0, 1.0);
+}
+
 void main() {
+    // if (length(v_texcoord) < 0.5) {
+    //     fragColor = vec4(Strange(v_texcoord), 1.0);
+    //     return;
+    // }
+    // vec2 uv = v_texcoord * screen_size;
+
+    // fragColor.rgb = LowPass(v_texcoord);
+    // fragColor.rgb = HighPass(v_texcoord);
+    fragColor.rgb = GetPixel(v_texcoord);
+
+    // uv = fract(uv / 20.0);
+    // if (uv.x < 0.1 || uv.x > 0.9 || uv.y < 0.1 || uv.y > 0.9) {
+    //     fragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    //     return;
+    // }
+    // fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+}
+
+void main2() {
     vec2 uv = v_texcoord;
 
     uv = uv * 2.0 - 1.0;
@@ -191,7 +251,7 @@ void main() {
 
     // off *= 5.0;
 
-    off += time * 0.1;
+    off += mod(time, 5.0 * 60.0) * 0.1;
     #ifdef Use_Weight
     int iter = 0;
 
@@ -266,13 +326,13 @@ void main() {
 
     // color = vec3(weight);
 
-    float tolteranz = 0.00;
-    if (length(color - vec3(0)) < tolteranz) {
-        color = color - vec3(1);
-    } else
-    if (length(color - vec3(1)) < tolteranz) {
-        color = vec3(1) - color;
-    }
+    // float tolteranz = 0.00;
+    // if (length(color - vec3(0)) < tolteranz) {
+    //     color = color - vec3(1);
+    // } else
+    // if (length(color - vec3(1)) < tolteranz) {
+    //     color = vec3(1) - color;
+    // }
     fragColor.rgb = color;
 
     // fragColor.b = 0.0;

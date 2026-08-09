@@ -24,7 +24,7 @@ case "$1" in
 esac
 
 if [ -f "$override_file" ]; then
-    hyprctl keyword decoration:screen_shader ""
+    hyprctl eval "hl.config({decoration={screen_shader=\"\"}})"
     hyprctl notify 1 2000 "rgb(ff00ff)" "Shader override active. No shader applied."
     exit 0
 fi
@@ -53,23 +53,25 @@ fi
 selected_shader="${shaders[$new_index]}"
 
 if echo "$(basename "$selected_shader")" | grep -qi cursor; then
-    hyprctl keyword cursor:invisible true
+    hyprctl eval "hl.config({cursor={invisible=true}})"
+    # hyprctl keyword cursor:invisible true
 else
-    hyprctl keyword cursor:invisible false
+    hyprctl eval "hl.config({cursor={invisible=false}})"
+    # hyprctl keyword cursor:invisible false
 fi
 
 if [[ "$selected_shader" == "NO_SHADER" ]]; then
-    hyprctl keyword debug:damage_tracking 2
-    hyprctl keyword decoration:screen_shader ""
+    hyprctl eval "hl.config({debug={damage_tracking=2}})"
+    hyprctl eval "hl.config({decoration={screen_shader=\"\"}})"
     hyprctl notify 1 2000 "rgb(ff00ff)" "No shader"
 elif [[ "$selected_shader" == *_noDamage.frag ]]; then
-    hyprctl keyword debug:damage_tracking 0
-    hyprctl keyword decoration:screen_shader "$selected_shader"
+    hyprctl eval "hl.config({debug={damage_tracking=0}})"
+    hyprctl eval "hl.config({decoration={screen_shader=\"$selected_shader\"}})"
     shader_name="$(basename "$selected_shader" | sed 's/_noDamage\.frag$//')"
     hyprctl notify 1 2000 "rgb(ff00ff)" "$shader_name"
 else
-    hyprctl keyword debug:damage_tracking 2
-    hyprctl keyword decoration:screen_shader "$selected_shader"
+    hyprctl eval "hl.config({debug={damage_tracking=2}})"
+    hyprctl eval "hl.config({decoration={screen_shader=\"$selected_shader\"}})"
     shader_name="$(basename "$selected_shader" .frag)"
     hyprctl notify 1 2000 "rgb(ff00ff)" "$shader_name"
 fi

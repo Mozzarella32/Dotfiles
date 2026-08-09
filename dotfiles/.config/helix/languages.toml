@@ -46,9 +46,9 @@ inlayHints.lifetimeElisionHints.enable = "skip_trivial"
 inlayHints.typeHints.hideClosureInitialization = false
 
 
-[[language]]
-name = "cpp"
-auto-format = true
+# [[language]]
+# name = "cpp"
+# auto-format = true
 
 [[language]]
 name = "ocaml"
@@ -119,16 +119,25 @@ indent = { tab-width = 4, unit = "    " }
 formatter = { command = 'shfmt', args = ["-i", "4"] }
 auto-format = true
 
-[[language]]
-name = "cpp"
-language-servers = ["clangd-custom"]
+# [[language]]
+# name = "cpp"
+# file-types = ["cpp", "cc", "cxx", "hpp", "h", "hxx", "ino", "ipp", "clcpp"]
 
-[language-server.clangd-custom]
+# [[language]]
+# name = "cpp"
+# language-servers = ["clangd-custom"]
+
+# [language-server.clangd-custom]
 # command = "/home/Valentin/source/llvm-project/build/bin/clangd"
-command = "clangd"
+# command = "clangd"
 # args =[
+    # "-std=c++23"
 #   "--background-index",
 #   "--pch-storage=memory",
 #   "-j",
 #   "8",
 # ]
+
+[[language]]
+name = "lua"
+formatter = { command = "stylua", args = [ "-" ] }

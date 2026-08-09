@@ -85,7 +85,6 @@
     "group/info": {
         "orientation": "inherit",
         "modules": [
-            "custom/virtualKeyboard",
             "backlight",
             //"custom/brightness",
             "battery",
@@ -107,12 +106,6 @@
             "custom/suspend",
             "custom/reboot"
         ]
-    },
-    "custom/virtualKeyboard": {
-        "format": " 󰌌 ",
-        "tooltip": true,
-        "tooltip-format": "Toggle virtual keyboard",
-        "on-click": "~/.config/hypr/script/ToggleVirtualKeyboard.sh" 
     },
     "custom/Wattage": {
         //"exec": "cat '{printf \"%.1f W \", $1*10^-6}' /sys/class/power_supply/BAT1/charge_now && ~/.config/hypr/script/UpdateShaderPowerProfile.sh > /dev/null",
@@ -308,7 +301,7 @@
 	    "interval": 5,
         // "thermal-zone": 2,
         // "hwmon-path": "/sys/class/thermal/thermal_zone1/temp",
-        "critical-threshold": 60,
+        "critical-threshold": 65,
         // "format-critical": "{temperatureC}°C {icon}",
         "format": "{temperatureC}°C {icon}",
         //"format-icons": [" ", "", " "],
